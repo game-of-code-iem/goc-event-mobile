@@ -1,0 +1,1 @@
+goc-event-mobile

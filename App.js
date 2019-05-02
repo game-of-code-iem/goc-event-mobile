@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 //Custom Components
-import EventList from "./components/Event/EventList"
+import EventList from "./src/components/Event/EventList"
 
 export default class App extends React.Component {
 	render() {

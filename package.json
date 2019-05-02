@@ -11,18 +11,21 @@
 		"react": "16.5.0",
 		"react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-ui-kitten": "3.1.2",
+    "socket.io-client": "^2.2.0",
 		"react-navigation": "^3.9.1",
 		"react-redux": "^6.0.1",
 		"reactotron-redux": "^3.1.0",
 		"redux": "^4.0.1",
-		"yarn": "^1.15.2"
+		"yarn": "^1.15.2",
     "react-native-vector-icons": "^6.4.2",
-	},
-	"devDependencies": {
 		"babel-preset-expo": "^5.0.0",
 		"reactotron-react-native": "^3.2.2"
-    "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
-    "react-native-status-bar-height": "^2.3.1"
+	},
+		"devDependencies": {
+			"babel-preset-expo": "^5.0.0",
+			"reactotron-react-native": "^3.2.2",
+			"@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+			"react-native-status-bar-height": "^2.3.1"
 	},
 	"private": true
 }

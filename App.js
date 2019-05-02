@@ -1,12 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Provider } from 'react-redux';
+import Store from './Store/configureStore';
+if (__DEV__) {
+	import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
+
+import PageTest from './src/Pages/PageTest';
 
 export default class App extends React.Component {
 	render() {
 		return (
-			<View style={styles.container}>
-				<Text>Open up App.js to start working on your app!</Text>
-			</View>
+			<Provider store={Store}>
+				<PageTest />
+			</Provider>
 		);
 	}
 }

@@ -1,7 +1,18 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
+import { connect } from 'react-redux';
 
-export default class DetailEvent extends Component {
+/*
+const mapStateToProps = (state) => ({
+	active: state.visibilityFilter
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	setVisibilityFilter: (body) => dispatch(setVisibilityFilter(body))
+});
+*/
+
+class DetailEvent extends Component {
     render() {
         return (
             <View>
@@ -10,3 +21,5 @@ export default class DetailEvent extends Component {
         )
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailEvent);

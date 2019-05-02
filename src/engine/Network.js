@@ -1,8 +1,8 @@
 // Network Engine //
 import SocketIOClient from 'socket.io-client';
-//import {connect} from 'react-redux'
+import {connect} from 'react-redux'
 
-const url = "http://localhost:3000"
+const url = "http://17ruecroixberthet.freeboxos.fr:4444"
 let socket
 
 const mapDispatchToProps = (dispatch) => ({

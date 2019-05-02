@@ -1,11 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+//Custom Components
+import EventList from "./components/Event/EventList"
 
 export default class App extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text>Open up App.js to start working on your app!</Text>
+				<EventList />
 			</View>
 		);
 	}
@@ -13,9 +16,8 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center'
+		paddingLeft: 12,
+		paddingRight: 12,
+		marginTop: getStatusBarHeight()
 	}
 });

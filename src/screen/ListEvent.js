@@ -108,7 +108,7 @@ class ListEvent extends Component {
                 break;
             case 3:
                 console.log("Créer un event...")
-                //TODO Lien vers le screen de création d'event !
+                this.props.navigation.navigate('WorkbenchEvent')
                 break;
         }
     }

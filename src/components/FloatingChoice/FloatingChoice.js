@@ -37,6 +37,13 @@ class FloatingChoice extends Component {
                             </View>
                         </TouchableOpacity>
                     }
+                    {this.state.showingChoices &&
+                        <TouchableOpacity onPress={() => this.props.callbackChoice(3)} >
+                            <View style={styles.choiceButton}>
+                                <RkText style={styles.choiceText}>{this.props.choice3}</RkText>
+                            </View>
+                        </TouchableOpacity>
+                    }
                 </View>
                 <TouchableOpacity onPress={() => this.toggleChoices()} style={styles.floatingButton}>
                     <View>

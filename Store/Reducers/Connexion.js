@@ -41,7 +41,7 @@ function connexionReducer(state = initialState, action) {
 
 		case 'WEBSOCKET:R:REGISTER':
 			// Assuming that your data is a DOMString in JSON format
-
+			Reactotron.log('regiter', action);
 			try {
 				result = JSON.parse(action.payload);
 			} catch (error) {
@@ -50,10 +50,7 @@ function connexionReducer(state = initialState, action) {
 
 			return Object.assign({}, state, {
 				User: {
-					id: result.id,
-					firstname: undefined,
-					lastname: undefined,
-					email: undefined
+					id: result.id
 				},
 
 				Response: {

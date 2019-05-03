@@ -37,7 +37,7 @@ const middleware = (store) => (next) => (action) => {
 
 				////////////////////////////////////////////////////////////////////////
 
-				socket.on('register/user ', (event) => {
+				socket.on('register/user', (event) => {
 					store.dispatch({ type: 'WEBSOCKET:R:REGISTER', payload: event });
 				});
 

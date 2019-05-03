@@ -12,8 +12,8 @@ import { createStackNavigator } from "react-navigation";
 //This is a router, it allow to change between different screen
 const AppNavigator = createStackNavigator(
   {
-    Register: RegisterScreen,
     Login: LoginScreen,
+    Register: RegisterScreen,
     Loading: LoadingScreen,
     ListEvent: ListEventScreen,
     DetailEvent: DetailEventScreen,

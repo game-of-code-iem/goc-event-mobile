@@ -4,18 +4,18 @@ import Colors from '../../consts/Colors';
 export default styles = StyleSheet.create({
     componentContainer: {
         width: 200,
-        height: 100,
+        height: 150,
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-evenly",
         alignItems: "flex-end",
         position: "absolute",
-        bottom: 0,
-        right: 0
+        bottom: 15,
+        right: 15
     },
     choicesContainer: {
-        height: 80,
-        width: 100,
+        height: 100,
+        width: 130,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between'

@@ -7,25 +7,27 @@
 		"eject": "expo eject"
 	},
 	"dependencies": {
+		"babel-preset-expo": "^5.0.0",
 		"expo": "^32.0.0",
 		"react": "16.5.0",
 		"react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-ui-kitten": "3.1.2",
-    "socket.io-client": "^2.2.0",
+		"react-native-dialog-input": "^1.0.7",
+		"react-native-tab-view": "^2.2.0",
+		"react-native-ui-kitten": "3.1.2",
+		"react-native-vector-icons": "^6.4.2",
 		"react-navigation": "^3.9.1",
 		"react-redux": "^6.0.1",
+		"reactotron-react-native": "^3.2.2",
 		"reactotron-redux": "^3.1.0",
 		"redux": "^4.0.1",
-		"yarn": "^1.15.2",
-    "react-native-vector-icons": "^6.4.2",
-		"babel-preset-expo": "^5.0.0",
-		"reactotron-react-native": "^3.2.2"
+		"socket.io-client": "^2.2.0",
+		"yarn": "^1.15.2"
 	},
-		"devDependencies": {
-			"babel-preset-expo": "^5.0.0",
-			"reactotron-react-native": "^3.2.2",
-			"@babel/plugin-proposal-export-namespace-from": "^7.2.0",
-			"react-native-status-bar-height": "^2.3.1"
+	"devDependencies": {
+		"@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+		"babel-preset-expo": "^5.0.0",
+		"react-native-status-bar-height": "^2.3.1",
+		"reactotron-react-native": "^3.2.2"
 	},
 	"private": true
 }

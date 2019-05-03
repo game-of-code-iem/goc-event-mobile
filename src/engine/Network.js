@@ -1,50 +1,55 @@
 // Network Engine //
-import SocketIOClient from 'socket.io-client';
+import io from 'socket.io-client';
+import Dispatcher from '../router/Dispatcher'
 //import {connect} from 'react-redux'
 
-const url = "http://localhost:3000"
 let socket
 
-const mapDispatchToProps = (dispatch) => ({
-    setStatus: (response) => dispatch(setStatus(response)),
-    setRegister: (response) => dispatch(setRegister(response)),
-    setLogin: (response) => dispatch(setLogin(response)),
-    setAccount: (response) => dispatch(setAccount(response)),
-    setEvent: (response) => dispatch(setEvent(response)),
-    setAction: (response) => dispatch(setAction(response)),
-})
-
-function init(props) {
+function init() {
     //Create Socket
-    socket = SocketIOClient(url)
-    
+    console.log("test")
+    socket = io.connect("http://192.168.43.211:4444",{
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax : 5000,
+        reconnectionAttempts: Infinity
+    })
+
+    console.log()
+
+
+    socket.on("connect", message => {
+        console.log("Connected " + message)
+    })
+
     socket.on("status", message => {
-        props.setStatus(message)
+        Dispatcher.dispatch("status",message)
     })
 
     socket.on("register", message => {
-        props.setRegister(message)
+        //props.setRegister(message)
     })
 
     socket.on("login", message => {
-        props.setLogin(message)
+        //props.setLogin(message)
     })
 
     socket.on("account", message => {
-        props.setAccount(message)
+        //props.setAccount(message)
     })
 
     socket.on("event", message => {
-        props.setEvent(message)
+        //props.setEvent(message)
     })
 
     socket.on("action", message => {
-        props.setAction(message)
+        //props.setAction(message)
     })
 
     socket.on("disconnect", message => {
-        props.setDisconnect(message)
+       //props.setDisconnect(message)
     })
+    
 }
 
 function login(data) {
@@ -63,4 +68,4 @@ function action(data) {
     socket.emit("action",data)
 }
 
-export default connect(mapDispatchToProps)(init,login,register,detail,action)
+export default {init,login,register,detail,action}

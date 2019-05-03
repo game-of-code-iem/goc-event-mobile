@@ -23,19 +23,14 @@ class Login extends Component {
     };
 
     checkFields() {
-        let mail = ""
-        mail = this.loginInput.inputRef._lastNativeText
-        let pass = ""
-        pass = this.passwordInput.inputRef._lastNativeText
-        console.log("Mail=", mail)
-        console.log("Pass=", pass)
-        console.log("non mail ?", !mail)
-        console.log("non pass ?", !pass)
+        let mail = this.loginInput.inputRef._lastNativeText
+        let pass = this.passwordInput.inputRef._lastNativeText
         if (mail && pass) {
             if (pass) this.setState({ passError: false })
             if (this.checkMail(mail)) {
                 this.setState({ mailError: false })
                 console.log("Mail is valid ! eady to continue login ad check password")
+                this.buildPayload()
             } else {
                 this.setState({ mailError: true })
                 console.log("Invalid Email structure")
@@ -48,6 +43,13 @@ class Login extends Component {
                 this.setState({ passError: true })
             }
         }
+    }
+
+    buildPayload() {
+        let login = {}
+        login.mail = this.loginInput.inputRef._lastNativeText
+        login.password = this.passwordInput.inputRef._lastNativeText
+        console.log(login)
     }
 
     checkMail(mail) {

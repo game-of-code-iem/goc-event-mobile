@@ -18,6 +18,10 @@ class Login extends Component {
         }
     }
 
+    static navigationOptions = {
+        header: null
+    };
+
     checkFields() {
         let mail = ""
         mail = this.loginInput.inputRef._lastNativeText
@@ -103,7 +107,7 @@ class Login extends Component {
                     </View>
                 </View>
                 <View style={styles.bottomSigninButton}>
-                    <RkButton style={styles.signinButton} rkType="pixEventBottom">INSCRIPTION</RkButton>
+                    <RkButton style={styles.signinButton} onPress={() => this.props.navigation.navigate('Register')} rkType="pixEventBottom">INSCRIPTION</RkButton>
                 </View>
             </View>
         )

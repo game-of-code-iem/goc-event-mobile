@@ -27,8 +27,43 @@ export default class Register extends Component {
         }
     }
 
-    componentDidMount() {
+    userRegister() {
+        this.checkFields()
+    }
 
+    checkFields() {
+        let mail = this.mailInput.inputRef._lastNativeText
+        let pass = this.passwordInput.inputRef._lastNativeText
+        let passCh = this.passwordCheckInput.inputRef._lastNativeText
+        if (mail && pass && passCh) {
+            this.setState({ passError: false, passChError: false })
+            if (mail.includes("@")) {
+                this.setState({ mailError: false })
+                if (pass != passCh) {
+                    this.setState({ passChError: true })
+                    console.log("Pass doesn't match")
+                } else {
+                    this.buildPayload()
+                }
+            } else {
+                console.log("Mauvaise structure de mail")
+                this.setState({ mailError: true })
+            }
+        } else {
+            if (!mail) { this.setState({ mailError: true }) } else { if (mail.includes("@")) this.setState({ mailError: false }) }
+            if (!pass) { this.setState({ passError: true }) } else { this.setState({ passError: false }) }
+            if (!passCh) { this.setState({ passChError: true }) } else { this.setState({ passChError: false }) }
+        }
+    }
+
+    buildPayload() {
+        let user = {}
+        user.mail = this.mailInput.inputRef._lastNativeText
+        user.firstName = this.fnInput.inputRef._lastNativeText ? this.fnInput.inputRef._lastNativeText : ""
+        user.lastName = this.lnInput.inputRef._lastNativeText ? this.lnInput.inputRef._lastNativeText : ""
+        user.password = this.passwordInput.inputRef._lastNativeText
+        user.login = this.mailInput.inputRef._lastNativeText
+        console.log(user)
     }
 
     renderIcon(icon) {
@@ -43,7 +78,7 @@ export default class Register extends Component {
                         labelStyle={this.state.mailError ? { color: 'red' } : null}
                         style={[styles.formInput, this.state.mailError ? { borderBottomColor: 'red' } : null]}
                         autoFocus={true}
-                        label={this.renderIcon('user')}
+                        label={this.renderIcon('envelope')}
                         placeholder='Adresse e-mail'
                         selectionColor={Colors.primary}
                         textContentType="emailAddress"
@@ -55,7 +90,7 @@ export default class Register extends Component {
                     <RkTextInput //INPUT FIRSTNAME
                         labelStyle={this.state.fnError ? { color: 'red' } : null}
                         style={[styles.formInput, this.state.fnError ? { borderBottomColor: 'red' } : null]}
-                        label={this.renderIcon('user')} //MOD
+                        label={this.renderIcon('address-card')}
                         placeholder='Prénom'
                         selectionColor={Colors.primary}
                         textContentType="givenName"
@@ -67,7 +102,7 @@ export default class Register extends Component {
                     <RkTextInput //INPUT LASTNAME
                         labelStyle={this.state.lnError ? { color: 'red' } : null}
                         style={[styles.formInput, this.state.lnError ? { borderBottomColor: 'red' } : null]}
-                        label={this.renderIcon('user')} //MOD
+                        label={this.renderIcon('address-card')}
                         placeholder='Nom'
                         selectionColor={Colors.primary}
                         textContentType="familyName"
@@ -79,7 +114,7 @@ export default class Register extends Component {
                     <RkTextInput //INPUT PASSWORD
                         labelStyle={this.state.passError ? { color: 'red' } : null}
                         style={[styles.formInput, this.state.passError ? { borderBottomColor: 'red' } : null]}
-                        label={this.renderIcon('lock')} //MOD
+                        label={this.renderIcon('lock')}
                         placeholder='Mot de passe'
                         returnKeyType="next"
                         selectionColor={Colors.primary}
@@ -92,17 +127,17 @@ export default class Register extends Component {
                     <RkTextInput //INPUT PASSWORD CHECK
                         labelStyle={this.state.passChError ? { color: 'red' } : null}
                         style={[styles.formInput, this.state.passChError ? { borderBottomColor: 'red' } : null]}
-                        label={this.renderIcon('lock')} //MOD
+                        label={this.renderIcon('lock')}
                         placeholder='Vérification du mot de passe'
                         selectionColor={Colors.primary}
                         textContentType="password"
                         secureTextEntry={true}
                         ref={(element) => { this.passwordCheckInput = element }}
-                        onSubmitEditing={() => console.log("dsd")}
+                        onSubmitEditing={() => this.userRegister()}
                     />
                 </View>
                 <View style={styles.buttonBottom}>
-                    <RkButton style={styles.submitForm} onPress={() => console.log('Ready to submit register form')} rkType="pixEventBottom">TERMINER</RkButton>
+                    <RkButton style={styles.submitForm} onPress={() => this.userRegister()} rkType="pixEventBottom">TERMINER</RkButton>
                 </View>
             </View>
         )

@@ -3,9 +3,11 @@ import { Header } from 'react-navigation';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 const window = Dimensions.get('window')
 
+const fullContainerHeight = window.height - Header.HEIGHT - getStatusBarHeight()
+
 export default styles = StyleSheet.create({
     registerContainer: {
-        height: window.height - Header.HEIGHT - getStatusBarHeight(),
+        height: fullContainerHeight,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -19,7 +21,9 @@ export default styles = StyleSheet.create({
         width: window.width,
         display: "flex",
         flexDirection: "column",
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        flex: 1
     },
     submitForm: {
         width: window.width,

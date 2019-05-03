@@ -1,7 +1,10 @@
 // Store/configureStore.js
-
-import { createStore, compose } from 'redux';
-import todoApp from './Reducers/TestReducer';
+import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
+import { createStore, compose, applyMiddleware } from 'redux';
+import reducer from './Reducers';
 import Reactotron from '../ReactotronConfig';
+import websocket from './Middleware/Websockets';
 
-export default createStore(todoApp, compose(Reactotron.createEnhancer()));
+const middlewares = [ websocket ];
+
+export default createStore(reducer, compose(applyMiddleware(...middlewares), Reactotron.createEnhancer()));

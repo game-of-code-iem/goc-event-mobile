@@ -8,7 +8,7 @@ let socket
 function init() {
     //Create Socket
     console.log("test")
-    socket = io.connect("http://192.168.43.211:4444",{
+    socket = io.connect("http://192.168.43.47:4545",{
         reconnection: true,
         reconnectionDelay: 1000,
         reconnectionDelayMax : 5000,
@@ -19,26 +19,32 @@ function init() {
 
 
     socket.on("connect", message => {
-        console.log("Connected " + message)
+        console.log("Connected ")
     })
 
     socket.on("status", message => {
         Dispatcher.dispatch("status",message)
     })
 
-    socket.on("register", message => {
+    socket.on("register/user", message => {
+        Dispatcher.dispatch("register",message)
         //props.setRegister(message)
     })
 
-    socket.on("login", message => {
+    socket.on("login/user", message => {
+        console.log("login")
+        Dispatcher.dispatch("login",message)
         //props.setLogin(message)
     })
 
     socket.on("account", message => {
+        
+        Dispatcher.dispatch("account",message)
         //props.setAccount(message)
     })
 
-    socket.on("event", message => {
+    socket.on("get/event", message => {
+        console.log(message)
         //props.setEvent(message)
     })
 
@@ -49,23 +55,24 @@ function init() {
     socket.on("disconnect", message => {
        //props.setDisconnect(message)
     })
+
+    socket.on("join/event", message => {
+        console.log(message)
+     })
+
+
+    socket.on("add/event", message => {
+        Dispatcher.dispatch("add/event",message)
+    })
     
 }
 
-function login(data) {
-    socket.emit("login",data)
+
+
+function send(key,data) {
+    console.log(data)
+    socket.emit(key,data)
 }
 
-function register(data) {
-    socket.emit("register",data)
-}
 
-function detail(data) {
-    socket.emit("detail",data)
-}
-
-function action(data) {
-    socket.emit("action",data)
-}
-
-export default {init,login,register,detail,action}
+export default {init,send}

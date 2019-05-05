@@ -22,6 +22,7 @@ export default styles = StyleSheet.create({
         borderRadius: 4,
         borderWidth: 0.5,
         borderColor: 'black',
+        alignSelf: 'flex-start'
     },
     infoHeaderInputs: {
         width: 200,
@@ -31,6 +32,26 @@ export default styles = StyleSheet.create({
     },
     submitForm: {
         width: Dimensions.get('window').width,
+        alignSelf: 'flex-end',
         height: 70
+    },
+    userNames: {
+        padding:4
+    },
+    userResultBox: {
+        borderRadius: 0,
+        borderWidth: 0.5,
+        borderColor: 'black'
+    },
+    selectedUserItem: {
+        padding: 5,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    selectedGuestsBox: {
+        height: 150,
+        backgroundColor: 'lightgrey'
     }
 })

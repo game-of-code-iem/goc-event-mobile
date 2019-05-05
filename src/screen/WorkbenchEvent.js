@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, Image } from 'react-native'
+import { Text, View, TouchableOpacity, Image, FlatList } from 'react-native'
 import { RkTextInput, RkButton } from 'react-native-ui-kitten'
+import { SearchBar } from 'react-native-elements';
 import { ImagePicker } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 //Styles & consts
@@ -14,8 +15,39 @@ class WorkbenchEvent extends Component {
         this.state = {
             titleError: false,
             descError: false,
-            uploadedImage: "",
-
+            uploadedImage: "a",
+            search: "",
+            showSearchResults: false,
+            searchUsers: [
+                {
+                    id: 15,
+                    firstName: 'Nils',
+                    lastName: 'WILMET',
+                    mail: 'nils.wilmet@gmail.com'
+                },
+                {
+                    id: 5,
+                    firstName: 'Clément',
+                    lastName: 'MERLET',
+                    mail: 'clement.merlet@gmail.com'
+                },
+                {
+                    id: 8,
+                    firstName: 'Morgane',
+                    lastName: 'BOUSSERT',
+                    mail: 'morgane.boussert@gmail.com'
+                },
+                {
+                    id: 22,
+                    firstName: 'Romaric',
+                    lastName: 'ROUSSEL',
+                    mail: 'romaric.roussel@gmail.com'
+                }
+            ],
+            cEventId: 1,
+            cEventTitle: "",
+            cEventDescription: "",
+            cEventGuests: []
         }
     }
 
@@ -26,8 +58,17 @@ class WorkbenchEvent extends Component {
         }
     }
 
+    updateSearch(search) {
+        this.setState({ search });
+        if (search == "show") {
+            this.setState({showSearchResults: true})
+        } else if (this.state.showSearchResults) {
+            this.setState({showSearchResults: false})
+        }
+    };
+
     renderIcon(icon) {
-        return <Icon style={styles.guestIcon} name={icon} size={11} />
+        return <Icon name={icon} size={11} />
     }
 
     _pickImage = async () => {
@@ -44,6 +85,14 @@ class WorkbenchEvent extends Component {
         }
     };
 
+    selectUser(user) {
+        console.log("User selected:"+user.id)
+        if (!this.state.cEventGuests.includes(user)) {
+            console.log("adding "+user.mail+" to array")
+        }
+        this.state.cEventGuests.push(user)
+    }
+
     render() {
         return (
             <View style={styles.workbenchContainer}>
@@ -57,7 +106,6 @@ class WorkbenchEvent extends Component {
                         <RkTextInput //INPUT TITLE
                             labelStyle={this.state.titleError ? { color: 'red' } : null}
                             style={this.state.titleError ? { borderBottomColor: 'red' } : null}
-                            autoFocus={true}
                             label={this.renderIcon('tag')}
                             placeholder='Titre'
                             selectionColor={Colors.primary}
@@ -76,8 +124,29 @@ class WorkbenchEvent extends Component {
                         />
                     </View>
                 </View>
-                <View>
-
+                <View style={styles.guestsComponent}>
+                    <SearchBar
+                        placeholder="Search..."
+                        onChangeText={search => this.updateSearch(search)}
+                        lightTheme={true}
+                        value={this.state.search}
+                    />
+                    {this.state.showSearchResults && this.state.searchUsers && 
+                        <View style={styles.userResultBox}>
+                            {this.state.searchUsers.map(user => (
+                                <TouchableOpacity style={styles.userNames} onPress={() => this.selectUser(user)}>
+                                    <Text key={user.id}>{user.firstName + " " + user.lastName}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View> 
+                    }
+                    <View style={styles.selectedGuestsBox}>
+                        
+                    </View>
+                    <FlatList
+                        data={this.state.cEventGuests}
+                        renderItem={({item}) => (<Text>moo</Text>)}
+                    />
                 </View>
                 <View style={styles.buttonBottom}>
                     <RkButton style={styles.submitForm} onPress={() => console.log("Send new event")} rkType="pixEventBottom">TERMINER</RkButton>
@@ -86,5 +155,11 @@ class WorkbenchEvent extends Component {
         )
     }
 }
+/*
+<View style={styles.selectedUserItem}>                                
+    <Text>{item.firstName + " " + item.lastName}</Text>
+    <TouchableOpacity><Icon color={Colors.red} name="times-circle-o" size={18} /></TouchableOpacity>
+</View>
+*/
 
 export default WorkbenchEvent

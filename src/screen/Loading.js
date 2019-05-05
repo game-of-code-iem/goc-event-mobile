@@ -1,28 +1,41 @@
-import React, { Component } from 'react'
-import { Text, View, Dimensions } from 'react-native'
-import { getStatusBarHeight } from 'react-native-status-bar-height';
-import FloatingChoice from '../components/FloatingChoice/FloatingChoice';
+import React, { Component } from 'react';
+import { Text, View, Button } from 'react-native';
+import { connect } from 'react-redux';
+import { connectWS, sendMessage } from '../../Store/Actions/Websockets';
 
-const heightForFloating = Dimensions.get('window').height - getStatusBarHeight()
+const mapStateToProps = (state) => ({
+	response: state.websocket.Response
+});
 
-export default class Loading extends Component {
+const mapDispatchToProps = (dispatch) => ({
+	connectWebSocket: (body) => dispatch(connectWS(body)),
+	sendWsMessage: (body) => dispatch(sendMessage(body))
+});
 
-    static navigationOptions = {
-        header: null
-    };
+class Loading extends Component {
+	constructor(props) {
+		super(props);
+		this.state = { status: '400' };
+	}
+	componentDidMount() {
+		this.props.connectWebSocket('http://192.168.43.47:4545');
+	}
 
-    onFloatingChoiceSelected(val) {
-        console.log("In loading, user selected " + val + " with floating")
-    }
+	componentDidUpdate(prevProps, prevState) {
+		console.log(this.props.response);
 
-    render() {
-        return (
-            <View style={{ height: heightForFloating, marginTop: getStatusBarHeight() }}>
-                <Text> Loading </Text>
+		if (this.props.response.code == '200') {
+			this.props.navigation.replace('Login');
+		}
+	}
 
-            </View>
-        )
-    }
+	render() {
+		return (
+			<View>
+				<Text> Loading ...</Text>
+			</View>
+		);
+	}
 }
 
-//<FloatingChoice choice1="Choix #1" choice2="Choix #2" callbackChoice={val => this.onFloatingChoiceSelected(val)} />
+export default connect(mapStateToProps, mapDispatchToProps)(Loading);

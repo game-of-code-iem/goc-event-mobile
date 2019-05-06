@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { login, register } from '../../Store/Actions/Connexion';
 
 const mapStateToProps = (state) => ({
-	response: state.connexion.Response
+	response: state.Response
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -58,7 +58,7 @@ class Login extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.response.code == 200) {
+		if (this.props.response.code == 200 && this.props.response.type == 'WEBSOCKET:R:LOGIN') {
 			this.props.navigation.replace('ListEvent');
 		}
 	}

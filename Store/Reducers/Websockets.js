@@ -5,13 +5,12 @@
 import Reactotron from 'reactotron-react-native';
 
 const initialState = {
-	Response: {
-		code: 0,
-		data: undefined
-	}
+	code: 0,
+	type: undefined
 };
 
 function reducer(state = initialState, action) {
+	Reactotron.log(action);
 	switch (action.type) {
 		case 'WEBSOCKET:MESSAGE':
 			Reactotron.log('message', action.payload);
@@ -24,19 +23,33 @@ function reducer(state = initialState, action) {
 			}
 
 			return Object.assign({}, state, {
-				Response: {
-					code: 200,
-					data: data
-				}
+				code: 200,
+				data: data
 			});
 
 		case 'WEBSOCKET:OPEN':
 			return Object.assign({}, state, {
-				Response: {
-					code: 200
-				}
+				code: 200,
+				type: 'WEBSOCKET:OPEN'
 			});
 			break;
+
+		case 'RESPONSE:CLEAR':
+			return state;
+			break;
+
+		case 'RESPONSE':
+			try {
+				response = JSON.parse(action.payload.payload);
+			} catch (error) {
+				// ... this is fine
+			}
+
+			return Object.assign({}, state, {
+				code: response.code,
+				type: action.payload.type
+			});
+
 		default:
 			return state;
 	}

@@ -14,9 +14,9 @@ import { connect } from 'react-redux';
 import { getEvent } from '../../Store/Actions/Event';
 
 const mapStateToProps = (state) => ({
-	response: state.websocket.Response,
-	user: state.connexion.User,
-	events: state.events.Events.events
+	response: state.Response,
+	user: state.User.currentUser,
+	events: state.Events.events
 });
 
 const mapDispatchToProps = (dispatch) => ({

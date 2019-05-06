@@ -5,15 +5,11 @@
 import Reactotron from 'reactotron-react-native';
 
 const initialState = {
-	User: {
+	currentUser: {
 		id: undefined,
 		firstname: undefined,
 		lastname: undefined,
 		email: undefined
-	},
-	Response: {
-		code: 0,
-		type: undefined
 	}
 };
 
@@ -30,12 +26,8 @@ function connexionReducer(state = initialState, action) {
 			}
 
 			return Object.assign({}, state, {
-				User: {
+				currentUser: {
 					id: result.data.user.userId
-				},
-				Response: {
-					code: result.code,
-					type: 'WEBSOCKET:R:LOGIN'
 				}
 			});
 
@@ -49,7 +41,7 @@ function connexionReducer(state = initialState, action) {
 			}
 
 			return Object.assign({}, state, {
-				User: {
+				currentUser: {
 					id: result.id
 				},
 

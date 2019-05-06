@@ -93,11 +93,14 @@ class DetailEvent extends Component {
 									style={{ width: 100, height: 100 }}
 									PlaceholderContent={<ActivityIndicator />}
 								/>
+
+								<View style={styles.arrowIconPic}>
+									<Icon size={30} name='ios-arrow-forward' type='ionicon' color={Colors.primary} onPress={() => this.showListGuests()}/> 
+								</View>		
+
 							</View>
 
-							<View style={styles.arrowIconPic}>
-								<Icon size={30} name='ios-arrow-forward' type='ionicon' color={Colors.primary} onPress={() => this.showListGuests()}/> 
-							</View>			
+							
 
 					</View>
 

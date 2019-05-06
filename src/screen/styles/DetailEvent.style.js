@@ -40,33 +40,32 @@ export default styles = StyleSheet.create({
     },
     descriptionText: {
         marginTop: 20,
-        textAlign: "justify"
+        textAlign: "justify",
+        marginBottom: 10
     },
     guestList: {
-        width: 150,
+        width: 170,
         display: "flex",
         flexDirection: 'row',
         justifyContent: "space-between",
+        alignItems: 'center',
         marginBottom: 20
     },
     picsTitle: {
         fontSize: 18,
         color: Colors.primary,
         marginTop: 10,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        marginBottom: 10
     },
     picsList: {
-        width: window.width - 90,
         display: "flex",
         flexDirection: 'row',
-        justifyContent: "space-between"
-    },
-    arrowIcon: {
-        paddingLeft: 0
+        justifyContent: "space-evenly"
+        
     },
     arrowIconPic: {
         height: 100,
-        flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center'

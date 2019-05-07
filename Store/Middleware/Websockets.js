@@ -103,6 +103,20 @@ const middleware = (store) => (next) => (action) => {
 				socket.on('update/post', (event) => {
 					store.dispatch({ type: 'WEBSOCKET:R:POST_UPDATE', payload: event });
 				});
+
+				//////////////////////////////////////////////////////////////////////////////
+
+				// socket.on('action', (event) => {
+				// 	switch (key) {
+				// 		case value:
+
+				// 			break;
+
+				// 		default:
+				// 			break;
+				// 	}
+
+				// });
 			}
 
 			break;

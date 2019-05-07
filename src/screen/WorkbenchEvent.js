@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, Image, FlatList } from 'react-native'
-import { RkTextInput, RkButton } from 'react-native-ui-kitten'
-import { SearchBar } from 'react-native-elements';
-import { ImagePicker } from 'expo';
+import { RkTextInput, RkButton, RkText, RkSwitch } from 'react-native-ui-kitten'
+import { SearchBar, Divider } from 'react-native-elements';
+import { ImagePicker, Permissions, Constants } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 //Styles & consts
 import styles from "./styles/WorkbenchEvent.style"
@@ -18,36 +18,14 @@ class WorkbenchEvent extends Component {
             uploadedImage: "a",
             search: "",
             showSearchResults: false,
-            searchUsers: [
-                {
-                    id: 15,
-                    firstName: 'Nils',
-                    lastName: 'WILMET',
-                    mail: 'nils.wilmet@gmail.com'
-                },
-                {
-                    id: 5,
-                    firstName: 'Clément',
-                    lastName: 'MERLET',
-                    mail: 'clement.merlet@gmail.com'
-                },
-                {
-                    id: 8,
-                    firstName: 'Morgane',
-                    lastName: 'BOUSSERT',
-                    mail: 'morgane.boussert@gmail.com'
-                },
-                {
-                    id: 22,
-                    firstName: 'Romaric',
-                    lastName: 'ROUSSEL',
-                    mail: 'romaric.roussel@gmail.com'
-                }
-            ],
+            showFirstResult: false,
+            searchUsers: [],
             cEventId: 1,
             cEventTitle: "",
             cEventDescription: "",
-            cEventGuests: []
+            cEventGuests: [],
+            cEventIsDraft: false,
+            gotCameraRollPerm: false
         }
     }
 
@@ -58,12 +36,75 @@ class WorkbenchEvent extends Component {
         }
     }
 
+    async componentDidMount() {
+        // SOCKET
+        // Get Event by Id => this.state (cEventId, cEventTitle, cEventGuests...) 
+
+        this.askCameraRollPermission()
+
+    }
+
+    async askCameraRollPermission() {
+        const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+        if (permission.status !== 'granted') {
+            const newPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if (newPermission.status === 'granted') {
+                console.log("CAMERA ROLL PERMISSION GRANTED")
+                this.setState({ gotCameraRollPerm: true })
+            }
+        } else {
+            console.log("CAMERA ROLL PERMISSION MISSING")
+            this.setState({ gotCameraRollPerm: false })
+        }
+    }
+
     updateSearch(search) {
         this.setState({ search });
-        if (search == "show") {
-            this.setState({showSearchResults: true})
-        } else if (this.state.showSearchResults) {
-            this.setState({showSearchResults: false})
+        if (search == "Ok") { //La recherche a des résultats : on affiche les résultats et on cache l'ajout d'un user désincris
+            this.setState({
+                searchUsers: [
+                    {
+                        id: 15,
+                        firstName: 'Nils',
+                        lastName: 'WILMET',
+                        mail: 'nils.wilmet@gmail.com'
+                    },
+                    {
+                        id: 5,
+                        firstName: 'Clément',
+                        lastName: 'MERLET',
+                        mail: 'clement.merlet@gmail.com'
+                    },
+                    {
+                        id: 8,
+                        firstName: 'Morgane',
+                        lastName: 'BOUSSERT',
+                        mail: 'morgane.boussert@gmail.com'
+                    },
+                    {
+                        id: 22,
+                        firstName: 'Romaric',
+                        lastName: 'ROUSSEL',
+                        mail: 'romaric.roussel@gmail.com'
+                    },
+                    {
+                        id: 44,
+                        firstName: 'Thomas',
+                        lastName: 'PETITJEAN',
+                        mail: 'thomas.petitjean@gmail.com'
+                    }
+                ]
+            })
+            this.setState({ showSearchResults: true })
+            this.setState({ showFirstResult: false })
+        } else { //La recherche n'affiche pas de résultats
+            this.setState({ searchUsers: [] })
+        }
+        if (this.state.searchUsers.length == 0 && search != "") { //Mais si la recherche n'affiche pas de résultats ET est != de "", on affiche la possiblité d'ajouter une personne désinscrite
+            this.setState({ showFirstResult: true })
+        }
+        if (search == "") { //Sinon si search est à "" on ferme aussi la possibilité d'ajouter une personne désinscrite 
+            this.setState({ showFirstResult: false })
         }
     };
 
@@ -72,9 +113,16 @@ class WorkbenchEvent extends Component {
     }
 
     _pickImage = async () => {
+        if (Constants.platform == 'ios') {
+            console.log("on ios, asking Cam Roll Permission")
+            this.askCameraRollPermission()
+        }
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [4, 3],
+        }).catch(e => {
+            this.askCameraRollPermission()
+            console.log(e)
         });
 
         console.log(result);
@@ -86,11 +134,26 @@ class WorkbenchEvent extends Component {
     };
 
     selectUser(user) {
-        console.log("User selected:"+user.id)
-        if (!this.state.cEventGuests.includes(user)) {
-            console.log("adding "+user.mail+" to array")
+        console.log("User selected:" + user.id)
+        if (this.state.cEventGuests.filter(item => { return item.id === user.id }).length > 0) {
+        } else {
+            userArray = this.state.cEventGuests
+            userArray.push(user)
+            this.setState({ cEventGuests: userArray })
         }
-        this.state.cEventGuests.push(user)
+    }
+
+    deleteUserFromList(userId) {
+        let userArray = this.state.cEventGuests.filter(user => {
+            return user.id != userId
+        })
+        this.setState({ cEventGuests: userArray })
+        //API
+        //Enlever l'user de l'event
+    }
+
+    onIsDraftChange(state) {
+        console.log(state)
     }
 
     render() {
@@ -124,29 +187,53 @@ class WorkbenchEvent extends Component {
                         />
                     </View>
                 </View>
+                <View>
+                    <RkText>Enregistrer en brouillon</RkText>
+                    <RkSwitch
+                        value={this.state.cEventIsDraft}
+                        onValueChange={(state) => this.onIsDraftChange(state)}
+                    />
+                </View>
                 <View style={styles.guestsComponent}>
+                    <Text style={styles.titleGuests}>Participants</Text>
                     <SearchBar
-                        placeholder="Search..."
+                        placeholder="Rechercher un utilisateur..."
                         onChangeText={search => this.updateSearch(search)}
                         lightTheme={true}
                         value={this.state.search}
                     />
-                    {this.state.showSearchResults && this.state.searchUsers && 
+                    {/*this.state.showFirstResult ? <TouchableOpacity style={}><Text>Ajouter </Text><Text style={styles.addUnsubscribedUser}>{this.state.search}</Text></TouchableOpacity> : null*/}
+                    {this.state.showSearchResults && this.state.searchUsers &&
                         <View style={styles.userResultBox}>
-                            {this.state.searchUsers.map(user => (
-                                <TouchableOpacity style={styles.userNames} onPress={() => this.selectUser(user)}>
-                                    <Text key={user.id}>{user.firstName + " " + user.lastName}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View> 
+                            <FlatList
+                                extraData={this.state}
+                                data={this.state.searchUsers}
+                                renderItem={({ item, index }) => (
+                                    <View style={styles.userNames}>
+                                        <TouchableOpacity onPress={() => this.selectUser(item)}><Text>{item.firstName + " " + item.lastName}</Text></TouchableOpacity>
+                                    </View>
+                                )}
+                            />
+                        </View>
                     }
+
                     <View style={styles.selectedGuestsBox}>
-                        
+                        {this.state.cEventGuests.length != 0 ?
+                            <FlatList
+                                extraData={this.state}
+                                data={this.state.cEventGuests}
+                                renderItem={({ item, index }) => (
+                                    <View style={styles.selectedUserItem}>
+                                        <View style={styles.selectedUserItemView}>
+                                            <Text>{item.firstName + " " + item.lastName}</Text>
+                                            <TouchableOpacity onPress={() => this.deleteUserFromList(item.id)}><Icon color={Colors.red} name="times-circle-o" size={22} /></TouchableOpacity>
+                                            {this.state.cEventGuests.length != index ? <Divider style={{ backgroundColor: 'blue' }} /> : null}
+                                        </View>
+                                    </View>
+                                )}
+                            /> : <Text style={styles.nobodyFound}>Aucun participant...</Text>}
                     </View>
-                    <FlatList
-                        data={this.state.cEventGuests}
-                        renderItem={({item}) => (<Text>moo</Text>)}
-                    />
+
                 </View>
                 <View style={styles.buttonBottom}>
                     <RkButton style={styles.submitForm} onPress={() => console.log("Send new event")} rkType="pixEventBottom">TERMINER</RkButton>
@@ -156,10 +243,7 @@ class WorkbenchEvent extends Component {
     }
 }
 /*
-<View style={styles.selectedUserItem}>                                
-    <Text>{item.firstName + " " + item.lastName}</Text>
-    <TouchableOpacity><Icon color={Colors.red} name="times-circle-o" size={18} /></TouchableOpacity>
-</View>
+
 */
 
 export default WorkbenchEvent

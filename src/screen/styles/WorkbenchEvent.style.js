@@ -1,13 +1,15 @@
 import { StyleSheet, Dimensions } from 'react-native'
 import { Header } from 'react-navigation';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
+import Colors from '../../consts/Colors';
 
 export default styles = StyleSheet.create({
     workbenchContainer: {
         display: 'flex',
         flexDirection: 'column',
         marginTop: 10,
-        height: Dimensions.get('window').width - getStatusBarHeight() - Header.HEIGHT
+        height: Dimensions.get('window').width - Header.HEIGHT - getStatusBarHeight(),
+        justifyContent: 'space-between'
     },
     workbenchInfoHeader: {
         display: 'flex',
@@ -36,22 +38,39 @@ export default styles = StyleSheet.create({
         height: 70
     },
     userNames: {
-        padding:4
+        padding: 6
     },
     userResultBox: {
-        borderRadius: 0,
-        borderWidth: 0.5,
-        borderColor: 'black'
+        maxHeight: 115
     },
     selectedUserItem: {
-        padding: 5,
+        padding: 8,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: window.width
+    },
+    selectedUserItemView: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: window.width,
+        justifyContent: 'space-between'
     },
     selectedGuestsBox: {
-        height: 150,
+        height: 130,
         backgroundColor: 'lightgrey'
+    },
+    addUnsubscribedUser: {
+        fontWeight: 'bold'
+    },
+    titleGuests: {
+        color: Colors.primary,
+        fontSize: 18,
+        padding: 8
+    },
+    nobodyFound: {
+        padding: 8,
+        fontStyle: 'italic'
     }
 })

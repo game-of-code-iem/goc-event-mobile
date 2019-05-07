@@ -12,6 +12,7 @@ import Colors from '../consts/Colors';
 //Redux
 import { connect } from 'react-redux';
 import { getEvent } from '../../Store/Actions/Event';
+import _ from 'lodash';
 
 const mapStateToProps = (state) => ({
 	response: state.Response,
@@ -35,6 +36,7 @@ class ListEvent extends Component {
 
 	onEventItemClick(id) {
 		console.log('ListEvent:onEventItemClick', id);
+
 		//TODO La navigation vers le detail de l'event
 	}
 
@@ -56,6 +58,7 @@ class ListEvent extends Component {
 
 	onDialogInputData(data) {
 		console.log("Code d'invitation reçu : ", data);
+		_.find(this.props.events, { age: 1, active: true });
 		//TODO traiter le code d'invitation
 		this.toggleDialog();
 	}

@@ -1,3 +1,10 @@
+export function setCurrentEvent(payload) {
+	return {
+		type: 'EVENT:SET_CURRENT',
+		payload: payload
+	};
+}
+
 export function deleteEvent(payload) {
 	return {
 		type: 'WEBSOCKET:SEND',

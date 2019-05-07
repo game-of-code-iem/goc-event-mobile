@@ -5,7 +5,8 @@
 import Reactotron from 'reactotron-react-native';
 
 const initialState = {
-	events: []
+	events: [],
+	currentEvent: undefined
 };
 
 function eventsReducer(state = initialState, action) {
@@ -86,6 +87,13 @@ function eventsReducer(state = initialState, action) {
 					code: 200,
 					type: 'WEBSOCKET:R:EVENT_ADD'
 				}
+			});
+
+		case 'EVENT:SET_CURRENT':
+			// Assuming that your response is a DOMString in JSON format
+
+			return Object.assign({}, state, {
+				currentEvent: action.payload
 			});
 
 		default:

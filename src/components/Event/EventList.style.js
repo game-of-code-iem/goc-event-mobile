@@ -10,7 +10,8 @@ export default StyleSheet.create({
     },
     imageContainer: {
         flex: 3,
-        marginRight: 12,
+        width: 96,
+        height: 96,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

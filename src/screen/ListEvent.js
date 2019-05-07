@@ -76,7 +76,7 @@ class ListEvent extends Component {
 			headerTintColor: Colors.primary,
 			headerRight: (
 				<View>
-					<TouchableOpacity style={styles.topBarIcon} onPress={() => console.log('Disconnecting...')}>
+					<TouchableOpacity style={styles.topBarIcon} onPress={() => navigation.replace('Login')}>
 						<Icon name="sign-out" size={28} />
 					</TouchableOpacity>
 				</View>

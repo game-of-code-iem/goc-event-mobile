@@ -20,7 +20,7 @@ class Loading extends Component {
 		this.state = { status: '400' };
 	}
 	componentDidMount() {
-		this.props.connectWebSocket('http://192.168.43.47:4545');
+		this.props.connectWebSocket('http://192.168.43.233:4545');
 	}
 
 	componentDidUpdate(prevProps, prevState) {

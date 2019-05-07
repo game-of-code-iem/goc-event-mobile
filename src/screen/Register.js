@@ -11,7 +11,7 @@ import { register } from '../../Store/Actions/Connexion';
 import reactotron from 'reactotron-react-native';
 
 const mapStateToProps = (state) => ({
-	response: state.connexion.Response
+	response: state.Response
 });
 
 const mapDispatchToProps = (dispatch) => ({

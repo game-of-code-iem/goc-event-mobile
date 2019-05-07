@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ActivityIndicator } from 'react-native';
+import { Text, View, ActivityIndicator, Modal, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Divider, Avatar, Icon, Image } from 'react-native-elements';
@@ -24,8 +24,22 @@ class DetailEvent extends Component {
 		super(props);
 
 		this.state = {
-			isAdmin: false
+			isAdmin: true,
+			eventId: "",
+			title: "Mon super événement",
+			place: "Lyon 6",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce congue neque in ligula accumsan, id malesuada risus fringilla. Curabitur id nisl massa. Curabitur facilisis nunc mattis venenatis condimentum. Curabitur ultricies sagittis scelerisque. Nulla placerat augue non lectus vestibulum.",
+			urlCoverImage: "http://www.mdjunited.com/medias/images/zoo.jpg",
+			firstGuestsArray: [],
+			lastPicsArray: [],
+			modalVisible: false
 		};
+	}
+
+	componentDidMount(){
+		// this.setState({
+		// 	eventId:  this.props.navigation.getParams('eventId', 0)
+		// })
 	}
 
 	// NAV BAR
@@ -42,9 +56,14 @@ class DetailEvent extends Component {
 		}
 	}
 
-	showListGuests(){
-
+	showListPics(){
+		// this.props.navigation.navigate('PicturesList', {
+		// 	eventId: this.state.eventId
+		//   });
 	}
+
+	showListGuests(){	}
+
 
 	render() {
 		return (
@@ -53,7 +72,7 @@ class DetailEvent extends Component {
 				<View style={styles.screenContainer}>
 					<Image
 					style={{width: 450, height: 200}}
-					source={{uri: 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'}}
+					source={{uri: this.state.urlCoverImage}}
 					/>
 					<LinearGradient
 						colors={['transparent', "rgba(255,255,255,0.2)","rgba(255,255,255,0.4)", "rgba(255,255,255,0.6)", "rgba(255,255,255,0.8)", "white"]}
@@ -61,8 +80,8 @@ class DetailEvent extends Component {
 					
 
 					<View style={styles.textContainer}>
-						<Text style={styles.title}>Mon super événement</Text>
-						<Text style={styles.lieuText}>Lyon 6</Text>
+						<Text style={styles.title}>{this.state.title}</Text>
+						<Text style={styles.lieuText}>{this.state.place}</Text>
 
 						<View style={styles.guestList}>
 							<Avatar rounded title="MD"/>
@@ -73,7 +92,7 @@ class DetailEvent extends Component {
 						</View>
 							
 						<Divider style={{ backgroundColor: 'black' }}/>
-						<Text style={styles.descriptionText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce congue neque in ligula accumsan, id malesuada risus fringilla. Curabitur id nisl massa. Curabitur facilisis nunc mattis venenatis condimentum. Curabitur ultricies sagittis scelerisque. Nulla placerat augue non lectus vestibulum.</Text>
+						<Text style={styles.descriptionText}>{this.state.description}</Text>
 
 						<Text style={styles.picsTitle}>Photos</Text>
 					
@@ -95,7 +114,7 @@ class DetailEvent extends Component {
 								/>
 
 								<View style={styles.arrowIconPic}>
-									<Icon size={30} name='ios-arrow-forward' type='ionicon' color={Colors.primary} onPress={() => this.showListGuests()}/> 
+									<Icon size={30} name='ios-arrow-forward' type='ionicon' color={Colors.primary} onPress={() => this.showListPics()}/> 
 								</View>		
 
 							</View>
@@ -106,10 +125,12 @@ class DetailEvent extends Component {
 
 				</View>
 
+				{this.state.isAdmin && 
 				<View style={styles.bottomSigninButton}>
 					<RkButton rkType="pixEventBottom" style={styles.signinButton}>MODIFIER</RkButton>
 				</View>
-				
+				}
+
 			</View>
 		);
 	}

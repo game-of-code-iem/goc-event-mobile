@@ -9,12 +9,13 @@ import WorkbenchEventScreen from '../screen/WorkbenchEvent';
 import { createStackNavigator } from 'react-navigation';
 
 //This is a router, it allow to change between different screen
-const AppNavigator = createStackNavigator({	
-	Login: LoginScreen,
+const AppNavigator = createStackNavigator({
 	Loading: LoadingScreen,
-	ListEvent: ListEventScreen,	
+	Login: LoginScreen,
+
+	ListEvent: ListEventScreen,
 	DetailEvent: DetailEventScreen,
-	Register: RegisterScreen,	
+	Register: RegisterScreen,
 	Gallery: GalleryScreen,
 	WorkbenchEvent: WorkbenchEventScreen
 });

@@ -20,7 +20,7 @@ class Loading extends Component {
 		this.state = { status: '400' };
 	}
 	componentDidMount() {
-		this.props.connectWebSocket('http://192.168.43.47:4545');
+		this.props.connectWebSocket('http://192.168.43.121:4545');
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -28,7 +28,7 @@ class Loading extends Component {
 
 		if (this.props.response.code == '200') {
 			this.props.navigation.replace('Login');
-			this.props.clearResponse();
+			//this.props.clearResponse();
 		}
 	}
 

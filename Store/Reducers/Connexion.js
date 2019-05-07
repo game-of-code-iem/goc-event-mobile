@@ -24,12 +24,15 @@ function connexionReducer(state = initialState, action) {
 			} catch (error) {
 				// ... this is fine
 			}
+			if (result.data.user != undefined) {
+				return Object.assign({}, state, {
+					currentUser: {
+						id: result.data.user.userId
+					}
+				});
+			}
 
-			return Object.assign({}, state, {
-				currentUser: {
-					id: result.data.user.userId
-				}
-			});
+			return state;
 
 		case 'WEBSOCKET:R:REGISTER':
 			// Assuming that your data is a DOMString in JSON format

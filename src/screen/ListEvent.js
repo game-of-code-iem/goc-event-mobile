@@ -12,7 +12,9 @@ import Colors from '../consts/Colors';
 //Redux
 import { connect } from 'react-redux';
 import { getEvent, setCurrentEvent, addEvent } from '../../Store/Actions/Event';
+import { clearResponse } from '../../Store/Actions/Response';
 import _ from 'lodash';
+import { Reactotron } from 'reactotron-react-native';
 
 const mapStateToProps = (state) => ({
 	response: state.Response,
@@ -23,7 +25,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	getEvent: (body) => dispatch(getEvent(body)),
 	setCurrentEvent: (body) => dispatch(setCurrentEvent(body)),
-	addEvent: (body) => dispatch(addEvent(body))
+	addEvent: (body) => dispatch(addEvent(body)),
+	clearResponse: () => dispatch(clearResponse())
 });
 
 class ListEvent extends Component {
@@ -82,7 +85,14 @@ class ListEvent extends Component {
 			headerTintColor: Colors.primary,
 			headerRight: (
 				<View>
-					<TouchableOpacity style={styles.topBarIcon} onPress={() => navigation.replace('Login')}>
+					<TouchableOpacity
+						style={styles.topBarIcon}
+						onPress={() => {
+							console.log('navigtion', navigation);
+							//navigation.state.params.props.clearResponse();
+							navigation.replace('Login');
+						}}
+					>
 						<Icon name="sign-out" size={28} />
 					</TouchableOpacity>
 				</View>

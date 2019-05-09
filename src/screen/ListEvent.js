@@ -11,7 +11,7 @@ import styles from './styles/ListEvent.style';
 import Colors from '../consts/Colors';
 //Redux
 import { connect } from 'react-redux';
-import { getEvent, setCurrentEvent } from '../../Store/Actions/Event';
+import { getEvent, setCurrentEvent, addEvent } from '../../Store/Actions/Event';
 import _ from 'lodash';
 
 const mapStateToProps = (state) => ({
@@ -22,7 +22,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	getEvent: (body) => dispatch(getEvent(body)),
-	setCurrentEvent: (body) => dispatch(setCurrentEvent(body))
+	setCurrentEvent: (body) => dispatch(setCurrentEvent(body)),
+	addEvent: (body) => dispatch(addEvent(body))
 });
 
 class ListEvent extends Component {
@@ -61,7 +62,12 @@ class ListEvent extends Component {
 
 	onDialogInputData(data) {
 		console.log("Code d'invitation reçu : ", data);
-		_.find(this.props.events, { age: 1, active: true });
+		this.props.addEvent({
+			auth: this.props.user.id,
+			data: {
+				inviteCode: data
+			}
+		});
 		//TODO traiter le code d'invitation
 		this.toggleDialog();
 	}

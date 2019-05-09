@@ -45,7 +45,7 @@ class EventItem extends React.Component {
 		return (
 			<View key={this.props.event.id} style={styles.container}>
 				<View style={styles.imageContainer}>
-					<Image style={styles.image} source={{ uri: this.props.event.image }} />
+					<Image style={styles.image} source={{ uri: this.props.event.uri }} />
 				</View>
 				<View style={styles.containerText}>
 					<View style={styles.titleContainer}>

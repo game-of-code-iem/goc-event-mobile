@@ -57,7 +57,7 @@ class DetailEvent extends Component {
 		return (
 			<View style={styles.page}>
 				<View style={styles.screenContainer}>
-					<Image style={{ width: 450, height: 200 }} source={{ uri: this.state.event.urlCoverImage }} />
+					<Image style={{ width: 450, height: 200 }} source={{ uri: this.state.event.uri }} />
 					<LinearGradient
 						colors={[
 							'transparent',
@@ -97,7 +97,9 @@ class DetailEvent extends Component {
 							<Image
 								source={{
 									uri:
-										'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'
+										this.state.event.picturesList[0] == undefined
+											? 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'
+											: this.state.event.picturesList[0].uri
 								}}
 								style={{ width: 100, height: 100 }}
 								PlaceholderContent={<ActivityIndicator />}
@@ -105,7 +107,9 @@ class DetailEvent extends Component {
 							<Image
 								source={{
 									uri:
-										'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'
+										this.state.event.picturesList[1] == undefined
+											? 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'
+											: this.state.event.picturesList[1].uri
 								}}
 								style={{ width: 100, height: 100 }}
 								PlaceholderContent={<ActivityIndicator />}
@@ -113,7 +117,9 @@ class DetailEvent extends Component {
 							<Image
 								source={{
 									uri:
-										'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'
+										this.state.event.picturesList[2] == undefined
+											? 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'
+											: this.state.event.picturesList[2].uri
 								}}
 								style={{ width: 100, height: 100 }}
 								PlaceholderContent={<ActivityIndicator />}

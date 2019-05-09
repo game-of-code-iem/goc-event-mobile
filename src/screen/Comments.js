@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, KeyboardAvoidingView } from 'react-native'
 import { Avatar, Input, Icon } from 'react-native-elements';
 import { RkButton } from 'react-native-ui-kitten'
 import Colors from '../consts/Colors';
@@ -12,6 +12,8 @@ class Comments extends Component {
         super(props)
         this.state = {
             id: "aaa",
+            firstName: "Utilisateur",
+            lastName: "Connecte",
             commentValue: "",
             commentList: [
                 {
@@ -42,33 +44,60 @@ class Comments extends Component {
      };
      
     likeComment(index){
+    }
 
+    publishComment(){
+        var newCommentList = this.state.commentList
+        newCommentList.push({
+            idUser: "aaa",
+            date: "",
+            text: this.state.commentValue,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName
+        })
+
+        this.setState({
+            commentList: newCommentList
+        })
     }
 
     render() {
         return (
-            <View  style={styles.page}>
+            <View style={styles.page}>
 
-                {this.state.commentList.map((comment, index) => (
-					<View style={styles.columnsComment}>
-                        <Avatar 
-                            rounded
-                            title={comment.firstName.charAt(0).toUpperCase()+ comment.lastName.charAt(0).toUpperCase()} />
-						
-                        <View style={styles.detailComment}>
-                            <Text style={styles.commentName}>{comment.firstName} {comment.lastName}</Text>
-                            <Text>{comment.text}</Text>
-                        </View>  
+                <View style={styles.commentPart}>
+                    {this.state.commentList.map((comment, index) => (
+                        <View style={styles.columnsComment}>
+                            <Avatar 
+                                rounded
+                                title={comment.firstName.charAt(0).toUpperCase()+ comment.lastName.charAt(0).toUpperCase()} />
+                            
+                            <View style={styles.detailComment}>
+                                <Text style={styles.commentName}>{comment.firstName} {comment.lastName}</Text>
+                                <Text style={styles.commentText}>{comment.text}</Text>
+                            </View>  
 
-                        <RkButton rkType="socialPhotos" onPress={() => this.likeComment(index)}>
-                                <Icon name='ios-heart' type='ionicon' color={Colors.red} />
-                        </RkButton>                  
-					
-                    </View>						
-                ))}       
-
-                <Input style={styles.commentInput} placeholder='Ecrire un commentaire...' />
-
+                            <RkButton style={styles.likeIcon} rkType="socialPhotos" onPress={() => this.likeComment(index)}>
+                                    <Text style={styles.countLikes}>13</Text>
+                                    <Icon style={{alignSelf: "flex-end"}} name='ios-heart' type='ionicon' color={Colors.red} />
+                            </RkButton>                  
+                        
+                        </View>						
+                    ))} 
+                </View>
+                
+                    <View style={styles.inputRow}>
+                            <Input 
+                                onChangeText={(commentValue) => this.setState({commentValue})}
+                                value={this.state.commentValue}
+                                containerStyle={styles.commentInput}
+                                inputContainerStyle={styles.commentInsideInput}
+                                placeholder='Ecrire un commentaire...' />
+                            <RkButton style={styles.publishButton} rkType="socialPhotos" onPress={() => this.publishComment()}>
+                                <Icon name='md-arrow-forward' type='ionicon'/>
+                            </RkButton>
+                    </View>
+           
 
             </View>
         )

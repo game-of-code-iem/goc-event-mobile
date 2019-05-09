@@ -15,5 +15,11 @@ export default globalTheme = {
         content: {
             fontSize: 22            
         }
+    }),
+    buttonPixEventBottom: RkTheme.setType('RkButton', 'pixEventBottomSecondary', {
+        container: {
+            backgroundColor: Colors.blue,
+            borderRadius: 0
+        }
     })
 }

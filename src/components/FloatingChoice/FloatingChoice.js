@@ -18,27 +18,32 @@ class FloatingChoice extends Component {
         this.setState({ showingChoices: !this.state.showingChoices })
     }
 
+    onItemClick(id) {
+        this.props.callbackChoice(id)
+        this.toggleChoices()
+    }
+
     render() {
         console.log(this.state.showingChoices)
         return (
             <View style={styles.componentContainer}>
                 <View style={styles.choicesContainer}>
                     {this.state.showingChoices &&
-                        <TouchableOpacity onPress={() => this.props.callbackChoice(1)}>
+                        <TouchableOpacity onPress={() => this.onItemClick(1)}>
                             <View style={styles.choiceButton}>
                                 <RkText style={styles.choiceText}>{this.props.choice1}</RkText>
                             </View>
                         </TouchableOpacity>
                     }
                     {this.state.showingChoices &&
-                        <TouchableOpacity onPress={() => this.props.callbackChoice(2)} >
+                        <TouchableOpacity onPress={() => this.onItemClick(2)} >
                             <View style={styles.choiceButton}>
                                 <RkText style={styles.choiceText}>{this.props.choice2}</RkText>
                             </View>
                         </TouchableOpacity>
                     }
                     {this.state.showingChoices &&
-                        <TouchableOpacity onPress={() => this.props.callbackChoice(3)} >
+                        <TouchableOpacity onPress={() => this.onItemClick(3)} >
                             <View style={styles.choiceButton}>
                                 <RkText style={styles.choiceText}>{this.props.choice3}</RkText>
                             </View>

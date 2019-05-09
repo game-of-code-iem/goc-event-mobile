@@ -27,7 +27,10 @@ function connexionReducer(state = initialState, action) {
 			if (result.data.user != undefined) {
 				return Object.assign({}, state, {
 					currentUser: {
-						id: result.data.user.userId
+						id: result.data.user.userId,
+						firstname: result.data.user.firstName,
+						lastname: result.data.user.lastName,
+						email: result.data.user.mail
 					}
 				});
 			}

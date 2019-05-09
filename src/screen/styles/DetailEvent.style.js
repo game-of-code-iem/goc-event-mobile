@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 import Colors from '../../consts/Colors';
 import { Header } from 'react-navigation';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
@@ -6,7 +6,8 @@ import { bold, white } from 'ansi-colors';
 
 const window = Dimensions.get('window')
 
-const globalHeight = window.height - Header.HEIGHT - getStatusBarHeight()
+const globalHeight = Platform.OS == "ios" ? window.height - Header.HEIGHT - 24 : 
+window.height - Header.HEIGHT - getStatusBarHeight()
 
 export default styles = StyleSheet.create({
 
@@ -25,10 +26,11 @@ export default styles = StyleSheet.create({
     },
     bottomSigninButton: {
         alignSelf: "flex-end",
+
     },
     signinButton: {
         width: window.width,
-        height: 50
+        height: 65
     },
     title: {
         fontSize: 30,
@@ -68,5 +70,15 @@ export default styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    guestRow: {
+        display: "flex",
+        flexDirection: 'row',
+        justifyContent: "space-between",
+        marginLeft: 5,
+        marginRight: 30
+    },
+    guestRowName: {
+        fontSize: 16
     }
 })

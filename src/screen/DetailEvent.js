@@ -89,7 +89,7 @@ class DetailEvent extends Component {
 							onPress={() => this.showListGuests()}
 						>
 							{this.state.event.guests.map((guest, index) => {
-								if (index <= 3) {
+								if (index < 3) {
 									return (
 										<Avatar
 											rounded

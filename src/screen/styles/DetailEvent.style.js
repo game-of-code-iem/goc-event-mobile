@@ -61,8 +61,7 @@ export default styles = StyleSheet.create({
     picsList: {
         display: "flex",
         flexDirection: 'row',
-        justifyContent: "space-evenly"
-        
+        justifyContent: "space-evenly"        
     },
     arrowIconPic: {
         height: 100,

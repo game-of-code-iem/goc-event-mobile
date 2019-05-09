@@ -4,14 +4,11 @@ const headerHeight = 80
 const window = Dimensions.get('window')
 
 export default styles = StyleSheet.create({
-    photoContainer: {
-    },
     headerContainer: {
-        backgroundColor: "rgba(0, 0, 0, 0.3)",
-        height: headerHeight,
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
         display: "flex",
-        alignItems: "center",
-        justifyContent: "space-evenly",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
         flexDirection: 'row'
     },
     backButton: {
@@ -25,7 +22,15 @@ export default styles = StyleSheet.create({
         color: 'white'
     },
     displayCommentButton: {
-        width: window.width,
+        width: window.width / 2,
         height: 50
+    },
+    galleryFooter: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexDirection: 'row',
+        width: window.width,
+        backgroundColor: "rgba(0, 0, 0, 0.8)"
     }
 })

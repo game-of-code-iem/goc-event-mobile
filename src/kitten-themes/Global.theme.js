@@ -15,5 +15,10 @@ export default globalTheme = {
         content: {
             fontSize: 22            
         }
+    }),
+    buttonSocialPhotos: RkTheme.setType('RkButton', 'socialPhotos', {
+        container: {
+            backgroundColor: "transparent"             
+        }
     })
 }

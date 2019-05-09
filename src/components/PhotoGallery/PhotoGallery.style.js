@@ -1,6 +1,7 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet, Dimensions } from "react-native"
 
-const headerHeight = 30
+const headerHeight = 80
+const window = Dimensions.get('window')
 
 export default styles = StyleSheet.create({
     photoContainer: {
@@ -10,15 +11,20 @@ export default styles = StyleSheet.create({
         height: headerHeight,
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-start"
+        justifyContent: "space-evenly",
+        flexDirection: 'row'
     },
     backButton: {
         height: headerHeight,
+        width: 100,
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
     },
     backLabel: {
         color: 'white'
+    },
+    displayCommentButton: {
+        width: window.width
     }
 })

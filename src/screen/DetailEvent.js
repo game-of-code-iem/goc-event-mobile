@@ -30,7 +30,7 @@ class DetailEvent extends Component {
 			place: "Lyon 6",
 			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce congue neque in ligula accumsan, id malesuada risus fringilla. Curabitur id nisl massa. Curabitur facilisis nunc mattis venenatis condimentum. Curabitur ultricies sagittis scelerisque. Nulla placerat augue non lectus vestibulum.",
 			urlCoverImage: "http://www.mdjunited.com/medias/images/zoo.jpg",
-			firstGuestsArray: [],
+			firstGuestsArray: [],		
 			lastPicsArray: [],
 			modalVisible: false
 		};

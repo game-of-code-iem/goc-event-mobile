@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, ActivityIndicator, Image } from 'react-native';
 import { connect } from 'react-redux';
+import * as Progress from 'react-native-progress';
 import { connectWS, sendMessage } from '../../Store/Actions/Websockets';
+import Colors from '../consts/Colors';
+import styles from "./styles/Loading.style"
 
 const mapStateToProps = (state) => ({
 	response: state.websocket.Response
@@ -15,24 +18,42 @@ const mapDispatchToProps = (dispatch) => ({
 class Loading extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { status: '400' };
+		this.state = {
+			status: '400',
+			loadingTitle: "Chargement...",
+			isLoading: true
+		};
 	}
+
+	static navigationOptions = {
+		header: null
+	};
+
 	componentDidMount() {
-		this.props.connectWebSocket('http://192.168.43.47:4545');
+		this.props.connectWebSocket('http://192.168.43.121:4545');
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		console.log(this.props.response);
+		if (this.props.response) {
+			console.log(this.props.response);
 
-		if (this.props.response.code == '200') {
-			this.props.navigation.replace('Login');
+			if (this.props.response.code == '200') {
+				this.props.navigation.replace('Login');
+			} else {
+				this.setState({ loadingTitle: "Erreur de connexion", isLoading: false })
+			}
+		} else {
+			this.setState({ loadingTitle: "Erreur de connexion", isLoading: false })
 		}
+
 	}
 
 	render() {
 		return (
-			<View>
-				<Text> Loading ...</Text>
+			<View style={styles.screenContainer}>
+				<Image style={styles.logo} source={require('../images/logo.png')} />
+				{this.state.isLoading && <ActivityIndicator size={100} color={Colors.primary} />}
+				<Text style={styles.loadingTitle}>{this.state.loadingTitle}</Text>
 			</View>
 		);
 	}

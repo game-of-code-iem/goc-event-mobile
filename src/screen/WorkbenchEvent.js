@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, Image, FlatList } from 'react-native'
-import { RkTextInput, RkButton, RkText, RkSwitch } from 'react-native-ui-kitten'
+import { Text, View, TouchableOpacity, Image, FlatList, Platform, KeyboardAvoidingView } from 'react-native'
+import { RkTextInput, RkButton, RkText, RkCalendar } from 'react-native-ui-kitten'
 import { SearchBar, Divider } from 'react-native-elements';
-import { ImagePicker, Permissions, Constants } from 'expo';
+import DatePicker from 'react-native-datepicker';
+import InviteSystem from '../engine/InviteSystem'
+import { ImagePicker, Permissions, FileSystem } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 //Styles & consts
 import styles from "./styles/WorkbenchEvent.style"
 import Colors from "../consts/Colors"
+const moment = require('moment');
 
 class WorkbenchEvent extends Component {
 
@@ -16,22 +19,26 @@ class WorkbenchEvent extends Component {
             titleError: false,
             descError: false,
             uploadedImage: "a",
+            uploadedImageExt: "",
             search: "",
             showSearchResults: false,
             showFirstResult: false,
             searchUsers: [],
-            cEventId: 1,
+            cEventId: null,
             cEventTitle: "",
+            cEventDate: "09/05/2019",
             cEventDescription: "",
             cEventGuests: [],
             cEventIsDraft: false,
-            gotCameraRollPerm: false
+            cEventImage: "",
+            gotCameraRollPerm: false,
+            isUpdate: false
         }
     }
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: 'Nouvel événement',
+            title: 'Editer un événement',
             headerTintColor: Colors.primary,
         }
     }
@@ -40,8 +47,15 @@ class WorkbenchEvent extends Component {
         // SOCKET
         // Get Event by Id => this.state (cEventId, cEventTitle, cEventGuests...) 
 
-        this.askCameraRollPermission()
+        if (Platform.OS == 'ios') this.askCameraRollPermission()
 
+        this.setState({ cEventDate: moment().format('L') })
+        console.log(moment().format('L'))
+        const eventId = this.props.navigation.getParam('itemId', 'NO-ID')
+        if (eventId != 'NO-ID') { //If it's an update
+            this.setState({ isUpdate: true })
+            this.addUpdateData(eventId)
+        }
     }
 
     async askCameraRollPermission() {
@@ -58,8 +72,14 @@ class WorkbenchEvent extends Component {
         }
     }
 
+    addUpdateData(eventId) {
+        //API
+        //Fetch l'event et passer ses données dans les state cEvent ET uploadedImage/uploadedImageExt
+
+    }
+
     updateSearch(search) {
-        this.setState({ search });
+        this.setState({ search });//eg si un user est trouvé dans la recherche !
         if (search == "Ok") { //La recherche a des résultats : on affiche les résultats et on cache l'ajout d'un user désincris
             this.setState({
                 searchUsers: [
@@ -92,6 +112,12 @@ class WorkbenchEvent extends Component {
                         firstName: 'Thomas',
                         lastName: 'PETITJEAN',
                         mail: 'thomas.petitjean@gmail.com'
+                    },
+                    {
+                        id: 78,
+                        firstName: 'Théo',
+                        lastName: 'TANCHOUX',
+                        mail: 'theo.tanchoux@gmail.com'
                     }
                 ]
             })
@@ -113,7 +139,7 @@ class WorkbenchEvent extends Component {
     }
 
     _pickImage = async () => {
-        if (Constants.platform == 'ios') {
+        if (Platform.OS == 'ios') {
             console.log("on ios, asking Cam Roll Permission")
             this.askCameraRollPermission()
         }
@@ -123,19 +149,40 @@ class WorkbenchEvent extends Component {
         }).catch(e => {
             this.askCameraRollPermission()
             console.log(e)
+            //TODO Toast de la permission needed
         });
 
         console.log(result);
 
         if (!result.cancelled) {
-            this.setState({ uploadedImage: result.uri });
-            this.imageInput.source = result.uri
+            console.log("IMG RESULT", result)
+            var splitted = result.uri.split('.')
+            var ext = splitted[splitted.length - 1]
+            console.log("Extension", ext)
+            this.setState({ uploadedImageExt: ext })
+            this.toBase64(result.uri).then(b64 => {
+                var fullURI = "data:" + result.type + "/" + ext + ";base64," + b64
+                this.setState({ uploadedImage: fullURI })
+                this.setState({ cEventImage: b64 })
+                this.imageInput.source = fullURI
+            }).catch(e => {
+                //TODO Toast erreur de conversion de l'image en base 64
+            })
+        } else {
+            //TODO Toast du cancel/error
         }
     };
+
+    async toBase64(fileUri) {
+        const imageB64 = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingTypes.Base64 })
+        return await imageB64
+    }
 
     selectUser(user) {
         console.log("User selected:" + user.id)
         if (this.state.cEventGuests.filter(item => { return item.id === user.id }).length > 0) {
+            console.log("User already in array")
+            // NE RIEN FAIRE
         } else {
             userArray = this.state.cEventGuests
             userArray.push(user)
@@ -148,12 +195,28 @@ class WorkbenchEvent extends Component {
             return user.id != userId
         })
         this.setState({ cEventGuests: userArray })
-        //API
-        //Enlever l'user de l'event
     }
 
-    onIsDraftChange(state) {
-        console.log(state)
+    buildPayload(isDraft) {
+        let event = {}
+        console.log(this.state.cEventDate)
+        console.log(Date.parse(this.state.cEventDate))
+        event.date = Date.parse(this.state.cEventDate)
+        event.title = this.state.cEventTitle
+        event.description = this.state.cEventDescription
+        event.guests = this.state.cEventGuests
+        event.status = isDraft ? "PREPARING" : "OPEN"
+        event.uri = this.state.uploadedImage
+        event.inviteCode = InviteSystem.generateInviteCode()
+        event.extension = this.state.uploadedImageExt
+        console.log("EventPayload:", event)
+
+        if (this.state.isUpdate) {
+            //API
+            //METTRE A JOUR L'EVENT
+        } else {
+            //CREER UN EVENT
+        }
     }
 
     render() {
@@ -171,38 +234,66 @@ class WorkbenchEvent extends Component {
                             style={this.state.titleError ? { borderBottomColor: 'red' } : null}
                             label={this.renderIcon('tag')}
                             placeholder='Titre'
+                            onChangeText={val => this.setState({ cEventTitle: val })}
+                            value={this.state.cEventTitle}
                             selectionColor={Colors.primary}
                             returnKeyType="next"
                             onSubmitEditing={() => this.descInput.focusInput()}
                             ref={(element) => { this.loginInput = element }}
                         />
-                        <RkTextInput //INPUT DESCRIPTION
-                            labelStyle={this.state.descError ? { color: 'red' } : null}
-                            style={this.state.descError ? { borderBottomColor: 'red' } : null}
-                            label={this.renderIcon('tags')}
-                            placeholder='Description'
-                            multiline={true}
-                            selectionColor={Colors.primary}
-                            ref={(element) => { this.descInput = element }}
-                        />
+                        <View style={styles.dateView}>
+                            <DatePicker
+                                style={{ width: 200 }}
+                                date={this.state.cEventDate}
+                                mode="date"
+                                placeholder="Choisir une date..."
+                                format="DD/MM/YYYY"
+                                minDate={moment().format('L')}
+                                confirmBtnText="Confirmer"
+                                cancelBtnText="Annuler"
+                                customStyles={{
+                                    dateIcon: {
+                                        position: 'absolute',
+                                        left: 0,
+                                        top: 4,
+                                        marginLeft: 0
+                                    },
+                                    dateInput: {
+                                        marginLeft: 36
+                                    }
+                                    // ... You can check the source to find the other keys.
+                                }}
+                                onDateChange={(date) => {
+                                    console.log("Datee", date)
+                                    this.setState({ cEventDate: date })
+                                }}
+                            />
+                        </View>
                     </View>
                 </View>
-                <View>
-                    <RkText>Enregistrer en brouillon</RkText>
-                    <RkSwitch
-                        value={this.state.cEventIsDraft}
-                        onValueChange={(state) => this.onIsDraftChange(state)}
+                <View style={styles.descriptionView}>
+                    <RkTextInput //INPUT DESCRIPTION
+                        labelStyle={this.state.descError ? { color: 'red' } : null}
+                        style={[styles.descriptionInput, this.state.descError ? { borderBottomColor: 'red' } : null]}
+                        label={this.renderIcon('tags')}
+                        onChangeText={val => this.setState({ cEventDescription: val })}
+                        value={this.state.cEventDescription}
+                        placeholder='Description'
+                        multiline={true}
+                        selectionColor={Colors.primary}
+                        ref={(element) => { this.descInput = element }}
                     />
                 </View>
+
                 <View style={styles.guestsComponent}>
                     <Text style={styles.titleGuests}>Participants</Text>
                     <SearchBar
                         placeholder="Rechercher un utilisateur..."
+                        platform={Platform.OS}
                         onChangeText={search => this.updateSearch(search)}
                         lightTheme={true}
                         value={this.state.search}
                     />
-                    {/*this.state.showFirstResult ? <TouchableOpacity style={}><Text>Ajouter </Text><Text style={styles.addUnsubscribedUser}>{this.state.search}</Text></TouchableOpacity> : null*/}
                     {this.state.showSearchResults && this.state.searchUsers &&
                         <View style={styles.userResultBox}>
                             <FlatList
@@ -216,27 +307,27 @@ class WorkbenchEvent extends Component {
                             />
                         </View>
                     }
-
+                    <Divider style={{ backgroundColor: Colors.indigo, margin: 12, marginBottom: 8 }} />
                     <View style={styles.selectedGuestsBox}>
                         {this.state.cEventGuests.length != 0 ?
                             <FlatList
                                 extraData={this.state}
+                                style={styles.flatlistSelected}
                                 data={this.state.cEventGuests}
                                 renderItem={({ item, index }) => (
                                     <View style={styles.selectedUserItem}>
                                         <View style={styles.selectedUserItemView}>
                                             <Text>{item.firstName + " " + item.lastName}</Text>
                                             <TouchableOpacity onPress={() => this.deleteUserFromList(item.id)}><Icon color={Colors.red} name="times-circle-o" size={22} /></TouchableOpacity>
-                                            {this.state.cEventGuests.length != index ? <Divider style={{ backgroundColor: 'blue' }} /> : null}
                                         </View>
                                     </View>
                                 )}
-                            /> : <Text style={styles.nobodyFound}>Aucun participant...</Text>}
+                            /> : <View style={styles.nobodyBox}><Text style={styles.nobodyFound}>Aucun participant, ajoutez les avec la recherche !</Text></View>}
                     </View>
-
                 </View>
                 <View style={styles.buttonBottom}>
-                    <RkButton style={styles.submitForm} onPress={() => console.log("Send new event")} rkType="pixEventBottom">TERMINER</RkButton>
+                    <RkButton style={styles.submitForm} onPress={() => this.buildPayload(true)} rkType="pixEventBottomSecondary">BROUILLON</RkButton>
+                    <RkButton style={styles.submitForm} onPress={() => this.buildPayload()} rkType="pixEventBottom">{!this.state.isUpdate ? "TERMINER" : "METTRE A JOUR"}</RkButton>
                 </View>
             </View>
         )

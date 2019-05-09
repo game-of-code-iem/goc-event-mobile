@@ -5,6 +5,7 @@ import Colors from '../../consts/Colors';
 
 export default styles = StyleSheet.create({
     workbenchContainer: {
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
         marginTop: 10,
@@ -26,16 +27,49 @@ export default styles = StyleSheet.create({
         borderColor: 'black',
         alignSelf: 'flex-start'
     },
+    dateView: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    dateTouchable: {
+        borderRadius: 4,
+        shadowColor: "#000",
+        shadowOpacity: 0.25,
+        shadowRadius: 8,
+        elevation: 3,
+        padding: 8,
+        flex: 1,
+        marginLeft: 10
+    },
+    dateValue: {
+
+    },
     infoHeaderInputs: {
         width: 200,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-around'
+        justifyContent: 'space-evenly'
+    },
+    descriptionView: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        width: window.width,
+        marginLeft: 15,
+        marginRight: 15
+    },
+    descriptionInput: {
+        maxHeight: 80
+    },
+    buttonBottom: {
+        display: 'flex',
+        flexDirection: 'row'
     },
     submitForm: {
-        width: Dimensions.get('window').width,
-        alignSelf: 'flex-end',
-        height: 70
+        width: Dimensions.get('window').width / 2,
+        height: 70,
     },
     userNames: {
         padding: 6
@@ -52,14 +86,27 @@ export default styles = StyleSheet.create({
         width: window.width
     },
     selectedUserItemView: {
+        flex: 1,
         display: 'flex',
         flexDirection: 'row',
-        width: window.width,
         justifyContent: 'space-between'
     },
+    guestsComponent: {
+        flex: 1,
+        width: window.width,
+    },
     selectedGuestsBox: {
-        height: 130,
-        backgroundColor: 'lightgrey'
+        flex: 100,
+        margin: 8,
+        borderRadius: 4,
+        shadowColor: "#000",
+        shadowOpacity: 0.25,
+        shadowRadius: 8,
+        elevation: 3,
+        padding: 8
+    },
+    flatlistSelected: {
+        width: window.width,
     },
     addUnsubscribedUser: {
         fontWeight: 'bold'
@@ -67,10 +114,20 @@ export default styles = StyleSheet.create({
     titleGuests: {
         color: Colors.primary,
         fontSize: 18,
+        fontWeight: 'bold',
         padding: 8
+    },
+    nobodyBox: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: 'center',
+        flex: 1,
+        width: window.width - 80
     },
     nobodyFound: {
         padding: 8,
-        fontStyle: 'italic'
+        fontStyle: 'italic',
+        fontSize: 22,
+        textAlign: "center"
     }
 })

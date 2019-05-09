@@ -9,8 +9,10 @@
 	"dependencies": {
 		"babel-preset-expo": "^5.0.0",
 		"expo": "^32.0.0",
+		"moment": "^2.24.0",
 		"react": "16.5.0",
 		"react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+		"react-native-datepicker": "^1.7.2",
 		"react-native-dialog-input": "^1.0.7",
 		"react-native-elements": "^1.1.0",
 		"react-native-search-bar": "^3.4.2",

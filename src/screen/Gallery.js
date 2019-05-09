@@ -58,6 +58,13 @@ class Gallery extends Component {
 
 	}
 
+	redirectToComments(imageId) {
+		console.log("redirectToComments, id : "+imageId)
+		this.props.navigation.navigate('Comments', {
+			pictureId: imageId
+		});
+	}
+
 	componentDidMount(){
 		this.props.navigation.setParams({
 			downloadAll: this.downloadAll
@@ -110,7 +117,7 @@ class Gallery extends Component {
     render() {
 		return (
 			<View>
-				<PhotoGallery photos={this.state.event.picturesList} />					
+				<PhotoGallery callbackComments={imageId => this.redirectToComments(imageId)} photos={this.state.event.picturesList} />					
 			</View>
 		);    
     }

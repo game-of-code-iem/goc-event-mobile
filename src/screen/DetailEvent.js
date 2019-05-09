@@ -110,9 +110,13 @@ class DetailEvent extends Component {
 						{this.state.guests.map((guest, index) => (
 							<View style={styles.guestRow}>
 								<Text style={styles.guestRowName}>{guest.prenom} {guest.nom}</Text>
+
+								{this.state.isAdmin && 
 								<TouchableOpacity onPress={() => this.deleteGuest(index)} > 
 									<Icon size={31} name='ios-close' type='ionicon' color={Colors.primary}/>							
-								</TouchableOpacity>																		
+								</TouchableOpacity>		
+								}
+
 							</View>							
 						))}
 					</Overlay>

@@ -54,6 +54,7 @@ class PhotoGallery extends Component {
       );
       
     displayCommentsPhoto() {
+        this.props.callbackComments(this.state.id)
     };
 
     likePicture(){

@@ -5,19 +5,21 @@ import ListEventScreen from '../screen/ListEvent';
 import DetailEventScreen from '../screen/DetailEvent';
 import GalleryScreen from '../screen/Gallery';
 import WorkbenchEventScreen from '../screen/WorkbenchEvent';
+import CommentsScreen from '../screen/Comments';
 
 import { createStackNavigator } from 'react-navigation';
 
 //This is a router, it allow to change between different screen
 const AppNavigator = createStackNavigator(
-  {
+  {     
+    Comments: CommentsScreen,
+	  Gallery: GalleryScreen,
     Loading: LoadingScreen,
     WorkbenchEvent: WorkbenchEventScreen,
     ListEvent: ListEventScreen,
-    Login: LoginScreen,
-    Register: RegisterScreen,
     DetailEvent: DetailEventScreen,
-    Gallery: GalleryScreen,
+    Login: LoginScreen,
+    Register: RegisterScreen          
   },
 );
 

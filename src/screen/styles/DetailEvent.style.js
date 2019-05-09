@@ -25,8 +25,7 @@ export default styles = StyleSheet.create({
         padding: 10
     },
     bottomSigninButton: {
-        alignSelf: "flex-end",
-
+        alignSelf: "flex-end"
     },
     signinButton: {
         width: window.width,

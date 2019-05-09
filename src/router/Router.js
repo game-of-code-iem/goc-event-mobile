@@ -16,6 +16,7 @@ const AppNavigator = createStackNavigator({
 	DetailEvent: DetailEventScreen,	
 	Register: RegisterScreen,	
 	Gallery: GalleryScreen,
+	Register: RegisterScreen,	
 	WorkbenchEvent: WorkbenchEventScreen
 });
 

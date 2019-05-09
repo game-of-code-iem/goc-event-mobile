@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, ActivityIndicator, Modal, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { Text, View, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Divider, Avatar, Icon, Image, Overlay } from 'react-native-elements';
+import { Divider, Avatar, Icon, Image, Overlay, Button } from 'react-native-elements';
 import { RkButton } from 'react-native-ui-kitten';
 import Colors from '../consts/Colors';
 import { LinearGradient } from 'expo';
@@ -72,6 +72,30 @@ class DetailEvent extends Component {
 		})
 	}
 
+	deleteGuest(index){
+		console.log("delete guest :"+index)
+		var guestToDelete = this.state.guests[index]
+
+		Alert.alert(
+			'Voulez-vous supprimer ce participant ?',
+			guestToDelete.prenom+" "+guestToDelete.nom,
+			[			  
+			  { text: 'Annuler',
+				onPress: () => console.log('Cancel Pressed'),
+				style: 'cancel',
+			  },
+			  { text: 'OK', onPress: () => {
+				var guestList = this.state.guests
+				guestList.splice(index, 1)
+				this.setState({
+				  guests: guestList
+			 	})
+			  }} 			  
+			],
+			{cancelable: false},
+		  );
+	}
+
 
 	render() {
 		return (
@@ -84,7 +108,12 @@ class DetailEvent extends Component {
 						onBackdropPress={() => this.setState({ isGuestsListVisible: false})}>
 						<Text style={styles.picsTitle}>Liste des participants</Text>
 						{this.state.guests.map((guest, index) => (
-							<Text>{guest.prenom} {guest.nom}</Text>
+							<View style={styles.guestRow}>
+								<Text style={styles.guestRowName}>{guest.prenom} {guest.nom}</Text>
+								<TouchableOpacity onPress={() => this.deleteGuest(index)} > 
+									<Icon size={31} name='ios-close' type='ionicon' color={Colors.primary}/>							
+								</TouchableOpacity>																		
+							</View>							
 						))}
 					</Overlay>
 

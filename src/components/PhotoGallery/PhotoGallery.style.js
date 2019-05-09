@@ -25,6 +25,7 @@ export default styles = StyleSheet.create({
         color: 'white'
     },
     displayCommentButton: {
-        width: window.width
+        width: window.width,
+        height: 50
     }
 })

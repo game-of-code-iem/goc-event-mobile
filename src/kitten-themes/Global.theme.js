@@ -21,5 +21,10 @@ export default globalTheme = {
             backgroundColor: Colors.blue,
             borderRadius: 0
         }
+    }),
+    buttonSocialPhotos: RkTheme.setType('RkButton', 'socialPhotos', {
+        container: {
+            backgroundColor: "transparent"             
+        }
     })
 }

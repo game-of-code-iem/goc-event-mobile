@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import { RkGallery, RkButton } from 'react-native-ui-kitten'
 import { FileSystem } from 'expo';
+import { Icon } from 'react-native-elements';
 
 //Styles
 import styles from "./PhotoGallery.style"
@@ -10,29 +11,88 @@ class PhotoGallery extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            currentImageSelected: {}
-        }
+            id: "aaa",
+            hasLike: false,
+            uri: "",
+            userId: "",
+            firstName: "",
+            lastName: "",
+            likeList: [
+                { idUser: "bbb" }
+            ]
+        }        
     }
 
     renderGalleryHeader = (onRequestClose) => (
         <View style={styles.headerContainer}>
-            <TouchableOpacity style={styles.backButton} onPress={onRequestClose}>
-                <Text style={styles.backLabel}>Retour</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.backButton} onPress={this.downloadPicture}>
-               <Text style={styles.backLabel}>Télécharger</Text>
-            </TouchableOpacity>
+
+            <RkButton rkType="socialPhotos" onPress={onRequestClose}>
+                <Icon name='arrow-back' type='material' color="white"/>
+            </RkButton>
+
         </View>
     )
 
     renderGalleryFooter = () => (
-        <View>
-          <RkButton rkType="pixEventBottom" style={styles.displayCommentButton} onPress={this.displayCommentsPhoto}>Afficher les commentaires</RkButton>
+        <View style={styles.galleryFooter}>
+
+            <RkButton rkType="socialPhotos" onPress={() => this.likePicture()}>
+            {this.state.hasLike ? <Icon name='ios-heart' type='ionicon' color="white"/> :  <Icon name='ios-heart-empty' type='ionicon' color="white"/> 
+			}    
+            </RkButton>
+
+          <RkButton rkType="socialPhotos" onPress={() => this.displayCommentsPhoto()}>
+                <Text>{this.state.likeList.length}</Text>
+                <Icon name='comments' type='foundation' color="white"/>
+          </RkButton>
+
+          <RkButton rkType="socialPhotos" onPress={() => this.downloadPicture()}>
+                 <Icon name='download' type='font-awesome' color="white"/>
+            </RkButton>
+
         </View>
       );
       
-    displayCommentsPhoto = () => {
+    displayCommentsPhoto() {
     };
+
+    likePicture(){
+        var idUser = "aaa"
+
+        if (this.state.likeList.filter(item => {return item.idUser == idUser}).length > 0) {
+            this.setState({
+                hasLike: false                   
+            }, this.removeFromLikelist(idUser))  
+                            
+        } else {
+            // le user n'a pas déjà liké la photo
+            this.setState({
+                hasLike: true
+            })
+            this.addInLikeList()  
+        }
+    }
+
+    addInLikeList(){
+        var likelistModified = this.state.likeList
+        likelistModified.push({idUser: "aaa"})
+		this.setState({
+		    likeList: likelistModified
+        })
+        console.log("add in likelist modified :"+JSON.stringify(this.state.likeList))
+    }
+
+    removeFromLikelist(id){
+        var idUser = "aaa"
+        var likelistModified = this.state.likeList
+
+        likelistModified = likelistModified.filter(item => {return item.idUser != idUser})
+        console.log("remove from likelist modified :"+JSON.stringify(likelistModified))
+		this.setState({
+		    likeList: likelistModified
+        })
+       
+    }
 
     downloadPicture(uri){
         console.log('downloadPicture - uri image : '+this.state.currentImageSelected.uri)
@@ -47,9 +107,15 @@ class PhotoGallery extends Component {
 
     onGridItemClick = (item, index) => {
         console.log('onGridItemClick - item : '+item.uri)
-        this.setState({
-            currentImageSelected: item
-        })
+        // this.setState({
+        //     id: item.id,
+        //     hasLike: item.hasLike,
+        //     uri: item.uri,
+        //     userId: item.userId,
+        //     firstName: item.firstName,
+        //     lastName: item.lastName,
+        //     likeList: item.likeList
+        // })
     }
 
     render() {
@@ -64,5 +130,5 @@ class PhotoGallery extends Component {
         )
     }
 }
-//renderGalleryHeader={(onRequestClose) => this.renderGalleryHeader(onRequestClose)} 
+
 export default PhotoGallery

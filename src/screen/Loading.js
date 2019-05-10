@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, ActivityIndicator, Image } from 'react-native';
 import { connect } from 'react-redux';
-import * as Progress from 'react-native-progress';
 import { connectWS, sendMessage } from '../../Store/Actions/Websockets';
 import Colors from '../consts/Colors';
 import styles from "./styles/Loading.style"

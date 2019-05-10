@@ -11,17 +11,19 @@ import { connect } from 'react-redux';
 import styles from './styles/WorkbenchEvent.style';
 import Colors from '../consts/Colors';
 const moment = require('moment');
-import { addEvent } from '../../Store/Actions/Event';
+import { addEvent, updateEvent } from '../../Store/Actions/Event';
 import { clearResponse } from '../../Store/Actions/Response';
 import reactotron from 'reactotron-react-native';
 
 const mapStateToProps = (state) => ({
 	response: state.Response,
-	currentUser: state.User.currentUser
+	currentUser: state.User.currentUser,
+	currentEvent: state.Events.currentEvent
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	addEvent: (body) => dispatch(addEvent(body)),
+	updateEvent: (body) => dispatch(updateEvent(body)),
 	clearResponse: () => dispatch(clearResponse())
 });
 
@@ -56,6 +58,12 @@ class WorkbenchEvent extends Component {
 		};
 	};
 
+	componentDidUpdate(prevProps, prevState) {
+		if (prevState != this.state) {
+			reactotron.log('satte', this.state);
+		}
+	}
+
 	async componentDidMount() {
 		// SOCKET
 		// Get Event by Id => this.state (cEventId, cEventTitle, cEventGuests...)
@@ -64,11 +72,12 @@ class WorkbenchEvent extends Component {
 
 		this.setState({ cEventDate: moment().format('L') });
 		console.log(moment().format('L'));
-		const eventId = this.props.navigation.getParam('itemId', 'NO-ID');
-		if (eventId != 'NO-ID') {
+	}
+
+	componentWillMount() {
+		if (this.props.currentEvent != undefined) {
 			//If it's an update
-			this.setState({ isUpdate: true });
-			this.addUpdateData(eventId);
+			this.addUpdateData();
 		}
 	}
 
@@ -86,9 +95,19 @@ class WorkbenchEvent extends Component {
 		}
 	}
 
-	addUpdateData(eventId) {
-		//API
-		//Fetch l'event et passer ses données dans les state cEvent ET uploadedImage/uploadedImageExt
+	addUpdateData() {
+		reactotron.log('addUpdate');
+		this.setState({
+			isUpdate: true,
+			uploadedImage: this.props.currentEvent.uri,
+			cEventId: this.props.currentEvent._id,
+			cEventTitle: this.props.currentEvent.title,
+			cEventDate: this.props.currentEvent.date,
+			cEventDescription: this.props.currentEvent.description,
+			cEventGuests: this.props.currentEvent.guests,
+			cEventImage: this.props.currentEvent.uri,
+			gotCameraRollPerm: false
+		});
 	}
 
 	updateSearch(search) {
@@ -156,9 +175,11 @@ class WorkbenchEvent extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.state.isUpdate) {
-		} else {
-			if (this.props.response.code == 200 && this.props.response.type == 'WEBSOCKET:R:EVENT_ADD') {
+		if (this.props.response.code == 200) {
+			if (
+				this.props.response.type == 'WEBSOCKET:R:EVENT_UPDATE' ||
+				this.props.response.type == 'WEBSOCKET:R:EVENT_ADD'
+			) {
 				this.props.navigation.pop(1);
 			}
 		}
@@ -239,13 +260,22 @@ class WorkbenchEvent extends Component {
 		event.guests = this.state.cEventGuests;
 		event.status = isDraft ? 'PREPARING' : 'OPEN';
 		event.uri = this.state.uploadedImage;
-		event.inviteCode = InviteSystem.generateInviteCode();
+		{
+			!this.state.isUpdate && (event.inviteCode = InviteSystem.generateInviteCode());
+		}
+
 		event.extension = this.state.uploadedImageExt;
-		console.log('EventPayload:', event);
+		{
+			this.state.isUpdate && (event.idEvent = this.props.currentEvent._id);
+		}
 
 		if (this.state.isUpdate) {
 			//API
 			//METTRE A JOUR L'EVENT
+			this.props.updateEvent({
+				auth: this.props.currentUser.id,
+				data: event
+			});
 		} else {
 			reactotron.log('state', event);
 			this.props.addEvent({
@@ -256,6 +286,7 @@ class WorkbenchEvent extends Component {
 	}
 
 	render() {
+		reactotron.log('state', this.state);
 		return (
 			<View style={styles.workbenchContainer}>
 				<View style={styles.workbenchInfoHeader}>

@@ -11,7 +11,7 @@ import styles from './styles/ListEvent.style';
 import Colors from '../consts/Colors';
 //Redux
 import { connect } from 'react-redux';
-import { getEvent, setCurrentEvent, addEvent } from '../../Store/Actions/Event';
+import { getEvent, setCurrentEvent, addEvent, clearCurrentEvent } from '../../Store/Actions/Event';
 import { clearResponse } from '../../Store/Actions/Response';
 import _ from 'lodash';
 import { Reactotron } from 'reactotron-react-native';
@@ -26,7 +26,8 @@ const mapDispatchToProps = (dispatch) => ({
 	getEvent: (body) => dispatch(getEvent(body)),
 	setCurrentEvent: (body) => dispatch(setCurrentEvent(body)),
 	addEvent: (body) => dispatch(addEvent(body)),
-	clearResponse: () => dispatch(clearResponse())
+	clearResponse: () => dispatch(clearResponse()),
+	clearCurrentEvent: () => dispatch(clearCurrentEvent())
 });
 
 class ListEvent extends Component {
@@ -47,6 +48,14 @@ class ListEvent extends Component {
 		//TODO La navigation vers le detail de l'event
 	}
 
+	onEventItemLongClick(id) {
+		console.log('ListEvent:onEventItemClick', id);
+		let tmp = this.props.events[id];
+		this.props.setCurrentEvent(tmp);
+		this.props.navigation.navigate('WorkbenchEvent');
+		//TODO La navigation vers le detail de l'event
+	}
+
 	onFloatingButtonChoice(id) {
 		console.log('ListEvent:onFloatingButtonChoice', id);
 		switch (id) {
@@ -59,6 +68,7 @@ class ListEvent extends Component {
 			case 3:
 				console.log('Créer un event...');
 				this.props.clearResponse();
+				this.props.clearCurrentEvent();
 				this.props.navigation.navigate('WorkbenchEvent');
 				break;
 		}
@@ -137,7 +147,11 @@ class ListEvent extends Component {
 	render() {
 		return (
 			<View>
-				<EventList callbackItemClick={(id) => this.onEventItemClick(id)} events={this.props.events} />
+				<EventList
+					callbackItemClick={(id) => this.onEventItemClick(id)}
+					events={this.props.events}
+					onLongItemPress={(id) => this.onEventItemLongClick(id)}
+				/>
 				<FloatingChoice
 					style={styles.floatingButton}
 					callbackChoice={(val) => this.onFloatingButtonChoice(val)}

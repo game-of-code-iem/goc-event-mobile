@@ -5,6 +5,12 @@ export function setCurrentEvent(payload) {
 	};
 }
 
+export function clearCurrentEvent() {
+	return {
+		type: 'EVENT:CLEAR_CURRENT'
+	};
+}
+
 export function deleteEvent(payload) {
 	return {
 		type: 'WEBSOCKET:SEND',

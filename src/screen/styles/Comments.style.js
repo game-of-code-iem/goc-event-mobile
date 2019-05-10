@@ -7,23 +7,44 @@ const window = Dimensions.get('window')
 const globalHeight = window.height - Header.HEIGHT - getStatusBarHeight()
 
 export default styles = StyleSheet.create({
-    page: {        
-        height: globalHeight,
+    page: {
+        height: globalHeight - 30,
         width: window.width,
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
+        paddingTop: 15
     },
 
     // COMMENTS LIST
+    header: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        marginBottom: 10,
+        width: window.width - 20
+    },
+    headerTitle: {
+        fontWeight: "700",
+        fontSize: 25,
+        marginRight: 15
+    },
+    closeIcon: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignSelf: "flex-end",
+        flex: 1,
+        marginRight: 10
+    },
     commentPart: {
-        height: globalHeight - 48,
+        height: globalHeight - 38,
         padding: 20,
         backgroundColor: Colors.grey
-    },    
-    columnsComment: {        
+    },
+    columnsComment: {
         height: 45,
-        width: window.width-20,
+        width: window.width - 20,
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
@@ -58,7 +79,7 @@ export default styles = StyleSheet.create({
     },
     commentInput: {
         //alignSelf: "flex-end",
-        width: window.width - 130        
+        width: window.width - 130
     },
     commentInsideInput: {
         borderBottomWidth: 0,

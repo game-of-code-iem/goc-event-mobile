@@ -21,7 +21,10 @@ class EventList extends React.Component {
 					data={this.props.events}
 					renderItem={({ item, index }) => {
 						return (
-							<TouchableOpacity onPress={() => this.onEventItemClick(index)}>
+							<TouchableOpacity
+								onPress={() => this.onEventItemClick(index)}
+								onLongPress={() => this.props.onLongItemPress(index)}
+							>
 								<EventItem key={item.id} event={item} type="default" />
 							</TouchableOpacity>
 						);

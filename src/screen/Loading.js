@@ -31,7 +31,7 @@ class Loading extends Component {
 	};
 
 	componentDidMount() {
-		this.props.connectWebSocket('http://192.168.43.121:4545');
+		this.props.connectWebSocket('http://192.168.43.89:4545');
 	}
 
 	componentDidUpdate(prevProps, prevState) {

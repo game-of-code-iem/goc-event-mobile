@@ -3,6 +3,8 @@
  * NB: There is no error handling!
  */
 import Reactotron from 'reactotron-react-native';
+import _ from 'lodash';
+import reactotron from 'reactotron-react-native';
 
 const initialState = {
 	events: [],
@@ -73,6 +75,23 @@ function eventsReducer(state = initialState, action) {
 				events: response.data
 			});
 
+		case 'WEBSOCKET:R:EVENT_GET_CRNTEVNT':
+			// Assuming that your response is a DOMString in JSON format
+
+			try {
+				response = JSON.parse(action.payload.event);
+			} catch (error) {
+				// ... this is fine
+			}
+			reactotron.log('events', response.data, action.payload.currentEventId);
+			let currentEvent = _.find(response.data, function(o) {
+				return o._id == action.payload.currentEventId;
+			});
+			return Object.assign({}, state, {
+				events: response.data,
+				currentEvent: currentEvent
+			});
+
 		case 'WEBSOCKET:R:EVENT_ADD':
 			// Assuming that your response is a DOMString in JSON format
 
@@ -94,6 +113,13 @@ function eventsReducer(state = initialState, action) {
 
 			return Object.assign({}, state, {
 				currentEvent: action.payload
+			});
+
+		case 'EVENT:CLEAR_CURRENT':
+			// Assuming that your response is a DOMString in JSON format
+
+			return Object.assign({}, state, {
+				currentEvent: undefined
 			});
 
 		default:

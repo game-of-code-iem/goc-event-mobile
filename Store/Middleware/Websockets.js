@@ -53,7 +53,7 @@ const middleware = (store) => (next) => (action) => {
 				});
 
 				socket.on('update/event', (event) => {
-					store.dispatch({ type: 'WEBSOCKET:R:EVENT_UPDATE', payload: event });
+					store.dispatch({ type: 'RESPONSE', payload: { type: 'WEBSOCKET:R:EVENT_UPDATE', payload: event } });
 				});
 
 				socket.on('join/event', (event) => {
@@ -66,8 +66,16 @@ const middleware = (store) => (next) => (action) => {
 				});
 
 				socket.on('get/event', (event) => {
-					store.dispatch({ type: 'WEBSOCKET:R:EVENT_GET', payload: event });
 					store.dispatch({ type: 'RESPONSE', payload: { type: 'WEBSOCKET:R:EVENT_GET', payload: event } });
+
+					if (store.getState().Events.currentEvent != undefined) {
+						store.dispatch({
+							type: 'WEBSOCKET:R:EVENT_GET_CRNTEVNT',
+							payload: { event: event, currentEventId: store.getState().Events.currentEvent._id }
+						}); //also update the current event
+					} else {
+						store.dispatch({ type: 'WEBSOCKET:R:EVENT_GET', payload: event });
+					}
 				});
 
 				/////////////////////////////////////////////////////////////////////////////
@@ -120,7 +128,7 @@ const middleware = (store) => (next) => (action) => {
 							socket.emit('get/event', JSON.stringify({ auth: store.getState().User.currentUser.id }));
 							//socket.emit(“get/joinedEvent”,JSON.stringify({auth:“5cd13763c0095d4e7c04d19d”}))
 							break;
-						case 'get/event':
+						case 'add/event':
 							Reactotron.log('EMIT', { auth: store.getState().User.currentUser.id });
 							socket.emit('get/event', JSON.stringify({ auth: store.getState().User.currentUser.id }));
 							break;

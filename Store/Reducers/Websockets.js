@@ -35,7 +35,10 @@ function reducer(state = initialState, action) {
 			break;
 
 		case 'RESPONSE:CLEAR':
-			return state;
+			return Object.assign({}, state, {
+				code: 0,
+				type: undefined
+			});
 			break;
 
 		case 'RESPONSE':

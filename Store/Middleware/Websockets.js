@@ -13,8 +13,7 @@ const middleware = (store) => (next) => (action) => {
 		case 'WEBSOCKET:CONNECT':
 			// Configure the object
 			console.log('middleware', action.payload.url);
-			Reactotron.log('ws', socket);
-			Reactotron.log('store', store, next, action);
+
 			if (socket == undefined) {
 				socket = io.connect(action.payload.url, {
 					reconnection: true,
@@ -63,6 +62,7 @@ const middleware = (store) => (next) => (action) => {
 
 				socket.on('add/event', (event) => {
 					store.dispatch({ type: 'WEBSOCKET:R:EVENT_ADD', payload: event });
+					store.dispatch({ type: 'RESPONSE', payload: { type: 'WEBSOCKET:R:EVENT_ADD', payload: event } });
 				});
 
 				socket.on('get/event', (event) => {
@@ -106,24 +106,35 @@ const middleware = (store) => (next) => (action) => {
 
 				//////////////////////////////////////////////////////////////////////////////
 
-				// socket.on('action', (event) => {
-				// 	switch (key) {
-				// 		case value:
+				socket.on('get/users', (event) => {
+					store.dispatch({ type: 'WEBSOCKET:R:USERS_GET', payload: event });
+				});
 
-				// 			break;
+				//////////////////////////////////////////////////////////////////////////////
 
-				// 		default:
-				// 			break;
-				// 	}
+				socket.on('action', (event) => {
+					let jsonMessage = JSON.parse(event);
+					switch (jsonMessage.data.action) {
+						case 'update/event':
+							Reactotron.log('EMIT', { auth: store.getState().User.currentUser.id });
+							socket.emit('get/event', JSON.stringify({ auth: store.getState().User.currentUser.id }));
+							//socket.emit(“get/joinedEvent”,JSON.stringify({auth:“5cd13763c0095d4e7c04d19d”}))
+							break;
+						case 'get/event':
+							Reactotron.log('EMIT', { auth: store.getState().User.currentUser.id });
+							socket.emit('get/event', JSON.stringify({ auth: store.getState().User.currentUser.id }));
+							break;
 
-				// });
+						default:
+							break;
+					}
+				});
 			}
 
 			break;
 
 		// User request to send a message
 		case 'WEBSOCKET:SEND':
-			Reactotron.log('SEND', action);
 			socket.emit(action.route, JSON.stringify(action.payload));
 			break;
 

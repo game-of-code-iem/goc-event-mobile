@@ -74,18 +74,18 @@ class ListEvent extends Component {
 	}
 
 	onFloatingButtonChoice(id) {
-		console.log("ListEvent:onFloatingButtonChoice", id)
+		console.log('ListEvent:onFloatingButtonChoice', id);
 		switch (id) {
 			case 1:
-				this.setState({ isScanningCode: true })
-				this.props.navigation.setParams({ showBackQr: true, title: "Scan du QR Code" })
+				this.setState({ isScanningCode: true });
 				break;
 			case 2:
-				this.toggleDialog()
+				this.toggleDialog();
 				break;
 			case 3:
-				console.log("Créer un event...")
-				this.props.navigation.navigate('WorkbenchEvent')
+				console.log('Créer un event...');
+				this.props.clearResponse();
+				this.props.navigation.navigate('WorkbenchEvent');
 				break;
 		}
 	}

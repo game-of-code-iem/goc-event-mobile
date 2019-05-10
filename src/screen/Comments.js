@@ -24,7 +24,16 @@ class Comments extends Component {
                     text: "Coucou",
                     firstName: "Momo",
                     lastName: "Boussert",
-                    mail: ""
+                    mail: "",
+                    hasLike: true,
+                    likeList: [
+                        {
+                            idUser: "bbb"
+                        },
+                        {
+                            idUser: "aaa"
+                        }
+                    ]
                 },
                 {
                     id: "ddd",
@@ -33,7 +42,9 @@ class Comments extends Component {
                     text: "Bonjour",
                     firstName: "Jean-mi",
                     lastName: "Test",
-                    mail: ""
+                    mail: "",
+                    hasLike: false,
+                    likeList: []
                 }
             ]
         }
@@ -49,9 +60,59 @@ class Comments extends Component {
         };
     };
 
+
+    // LIKES
+
     likeComment(index) {
+        var idUser = "aaa"
+
+        if (this.state.commentList[index].likeList.filter(item => { return item.idUser == idUser }).length > 0) {
+            // le user a déjà liké le commentaire => on l'enlève
+
+            var newCommentList = this.state.commentList
+            newCommentList[index].hasLike = false
+            this.setState({
+                commentList: newCommentList
+            }, this.removeFromLikelist(idUser, index))
+
+        } else {
+            // le user n'a pas déjà liké le commentaire => on le met
+            var newCommentList = this.state.commentList
+            newCommentList[index].hasLike = true
+            this.setState({
+                commentList: newCommentList
+            }, this.addInLikelist(index))
+        }
+    }
+
+    addInLikelist(index) {
+        var newCommentList = this.state.commentList
+        newCommentList[index].likeList.push({ idUser: "aaa" })
+        this.setState({
+            commentList: newCommentList
+        })
+        console.log("add in likelist modified :" + JSON.stringify(this.state.commentList))
+    }
+
+    removeFromLikelist(id, index) {
+        var idUser = "aaa"
+        var newCommentList = this.state.commentList
+
+        var likelist = newCommentList[index].likeList
+        likelist = likelist.filter(item => { return item.idUser != idUser })
+
+        newCommentList[index].likeList = likelist
+
+        //  newCommentList[index] = newCommentList[index].filter(item => { return item.idUser != idUser })
+        console.log("remove from likelist modified :" + JSON.stringify(newCommentList))
+        this.setState({
+            commentList: newCommentList
+        })
 
     }
+
+
+    // COMMENTAIRE
 
     publishComment() {
         var newCommentList = this.state.commentList
@@ -103,9 +164,12 @@ class Comments extends Component {
                             </View>
 
                             <RkButton style={styles.likeIcon} rkType="socialPhotos" onPress={() => this.likeComment(index)}>
-                                <Text style={styles.countLikes}>13</Text>
-                                <Icon style={{ alignSelf: "flex-end" }} name='ios-heart' type='ionicon' color={Colors.red} />
+                                <Text style={styles.countLikes}> {comment.likeList.length.toString()} </Text>
+                                {comment.hasLike ? <Icon style={{ alignSelf: "flex-end" }} name='ios-heart' type='ionicon' color={Colors.red} />
+                                    : <Icon style={{ alignSelf: "flex-end" }} name='ios-heart-empty' type='ionicon' color={Colors.red} />
+                                }
                             </RkButton>
+
 
                         </View>
                     ))}

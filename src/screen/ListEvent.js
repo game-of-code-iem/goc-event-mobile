@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch) => ({
 	clearCurrentEvent: () => dispatch(clearCurrentEvent())
 });
 
-var context = null
+var context = null;
 
 class ListEvent extends Component {
 	constructor(props) {
@@ -41,22 +41,25 @@ class ListEvent extends Component {
 			isScanningCode: false,
 			isDialogVisible: false
 		};
-		context = this
+		context = this;
 	}
 
 	static navigationOptions = ({ navigation }) => {
-		var headerLeft = null
-		if (navigation.getParam("showBackQr") == true) {
-			headerLeft = <View style={{ marginLeft: 8 }}>
-				<TouchableOpacity onPress={() => context.handleBackPress()}>
-					<IconMat name="arrow-back" color={Colors.primary} size={35} />
-				</TouchableOpacity>
-			</View>
+		var headerLeft = null;
+		if (navigation.getParam('showBackQr') == true) {
+			headerLeft = (
+				<View style={{ marginLeft: 8 }}>
+					<TouchableOpacity onPress={() => context.handleBackPress()}>
+						<IconMat name="arrow-back" color={Colors.primary} size={35} />
+					</TouchableOpacity>
+				</View>
+			);
 		}
 		return {
 			title: navigation.getParam('title') || 'Mes événements',
 			headerTintColor: Colors.primary,
-			headerRight: ( //Attention au screen replace si on met un AsyncStorage des identifiants
+			//Attention au screen replace si on met un AsyncStorage des identifiants
+			headerRight: (
 				<View>
 					<TouchableOpacity style={styles.topBarIcon} onPress={() => navigation.replace('Login')}>
 						<Icon name="sign-out" size={28} />
@@ -121,14 +124,14 @@ class ListEvent extends Component {
 		const { status } = await Permissions.askAsync(Permissions.CAMERA);
 		this.setState({ hasCameraPermission: status === 'granted' });
 		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress());
-		this.props.navigation.setParams({ title: "Mes événements" })
+		this.props.navigation.setParams({ title: 'Mes événements' });
 		//TODO Recupérer la liste des events
 	}
 
 	handleBarCodeScanned = ({ type, data }) => {
 		console.log(`Bar code with type ${type} and data ${data} has been scanned!`);
 		this.setState({ isScanningCode: false });
-		this.props.navigation.setParams({ showBackQr: false, title: "Mes événements" })
+		this.props.navigation.setParams({ showBackQr: false, title: 'Mes événements' });
 		//TODO Traiter les données du QR Code, laisser la caméra et afficher un toast d'erreur si la data du code QR ne respecte pas la stucture !
 	};
 
@@ -140,7 +143,7 @@ class ListEvent extends Component {
 	handleBackPress() {
 		if (this.state.isScanningCode) {
 			this.setState({ isScanningCode: false });
-			this.props.navigation.setParams({ showBackQr: false, title: "Mes événements" })
+			this.props.navigation.setParams({ showBackQr: false, title: 'Mes événements' });
 		}
 	}
 
@@ -155,7 +158,11 @@ class ListEvent extends Component {
 	render() {
 		return (
 			<View style={styles.listEventContainer}>
-				<EventList callbackItemClick={(id) => this.onEventItemClick(id)} events={this.state.events} />
+				<EventList
+					callbackItemClick={(id) => this.onEventItemClick(id)}
+					events={this.props.events}
+					onLongItemPress={(id) => this.onEventItemLongClick(id)}
+				/>
 				{this.state.isScanningCode && (
 					<BarCodeScanner onBarCodeScanned={this.handleBarCodeScanned} style={StyleSheet.absoluteFill} />
 				)}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { connect } from 'react-redux';
-
+import IconFa from 'react-native-vector-icons/FontAwesome';
 import { Divider, Avatar, Icon, Image, Overlay, Button } from 'react-native-elements';
 import { RkButton } from 'react-native-ui-kitten';
 import Colors from '../consts/Colors';
@@ -38,7 +38,14 @@ class DetailEvent extends Component {
 	static navigationOptions = ({ navigation }) => {
 		return {
 			title: 'Détail événement',
-			headerTintColor: Colors.primary
+			headerTintColor: Colors.primary,
+			headerRight: (
+				<View style={{ marginRight: 8 }}>
+					<TouchableOpacity onPress={() => console.log("show")}>
+						<IconFa name="qrcode" size={28} />
+					</TouchableOpacity>
+				</View>
+			)
 		};
 	};
 

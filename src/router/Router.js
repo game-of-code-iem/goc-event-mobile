@@ -12,12 +12,11 @@ import { createStackNavigator } from 'react-navigation';
 const AppNavigator = createStackNavigator({
 	Loading: LoadingScreen,
 	Login: LoginScreen,
-
 	ListEvent: ListEventScreen,
 	DetailEvent: DetailEventScreen,
 	Register: RegisterScreen,
 	Gallery: GalleryScreen,
-	Register: RegisterScreen,	
+	Register: RegisterScreen,
 	WorkbenchEvent: WorkbenchEventScreen
 });
 

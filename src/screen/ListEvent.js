@@ -47,21 +47,22 @@ class ListEvent extends Component {
 		//TODO La navigation vers le detail de l'event
 	}
 
-    onFloatingButtonChoice(id) {
-        console.log("ListEvent:onFloatingButtonChoice", id)
-        switch (id) {
-            case 1:
-                this.setState({ isScanningCode: true })
-                break;
-            case 2:
-                this.toggleDialog()
-                break;
-            case 3:
-                console.log("Créer un event...")
-                this.props.navigation.navigate('WorkbenchEvent')
-                break;
-        }
-    }
+	onFloatingButtonChoice(id) {
+		console.log('ListEvent:onFloatingButtonChoice', id);
+		switch (id) {
+			case 1:
+				this.setState({ isScanningCode: true });
+				break;
+			case 2:
+				this.toggleDialog();
+				break;
+			case 3:
+				console.log('Créer un event...');
+				this.props.clearResponse();
+				this.props.navigation.navigate('WorkbenchEvent');
+				break;
+		}
+	}
 
 	onDialogInputData(data) {
 		console.log("Code d'invitation reçu : ", data);

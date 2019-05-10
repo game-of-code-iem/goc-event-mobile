@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, KeyboardAvoidingView } from 'react-native'
+import { Text, View, Alert, ToastAndroid } from 'react-native'
 import { Avatar, Input, Icon } from 'react-native-elements';
 import { RkButton } from 'react-native-ui-kitten'
 import Colors from '../consts/Colors';
@@ -36,8 +36,8 @@ class Comments extends Component {
                     ]
                 },
                 {
-                    id: "ddd",
-                    idUser: "bbb",
+                    id: "aaa",
+                    idUser: "aaa",
                     date: "1155554889",
                     text: "Bonjour",
                     firstName: "Jean-mi",
@@ -100,10 +100,7 @@ class Comments extends Component {
 
         var likelist = newCommentList[index].likeList
         likelist = likelist.filter(item => { return item.idUser != idUser })
-
         newCommentList[index].likeList = likelist
-
-        //  newCommentList[index] = newCommentList[index].filter(item => { return item.idUser != idUser })
         console.log("remove from likelist modified :" + JSON.stringify(newCommentList))
         this.setState({
             commentList: newCommentList
@@ -122,12 +119,41 @@ class Comments extends Component {
             text: this.state.commentValue,
             firstName: this.state.firstName,
             lastName: this.state.lastName,
-            mail: this.state.mail
+            mail: this.state.mail,
+            likeList: []
         })
 
         this.setState({
             commentList: newCommentList
         })
+    }
+
+    deleteComment(index) {
+        var idUser = "aaa"
+
+        Alert.alert(
+            'Voulez-vous supprimer ce commentaire ?',
+            null,
+            [
+                {
+                    text: 'Annuler',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK', onPress: () => {
+                        var newCommentList = this.state.commentList
+                        newCommentList.splice(index, 1)
+                        this.setState({
+                            commentList: newCommentList
+                        })
+                        ToastAndroid.show('Commentaire supprimé', ToastAndroid.SHORT);
+                    }
+                }
+            ],
+            { cancelable: false },
+        );
+
     }
 
     closeCommentsPage() {
@@ -163,6 +189,7 @@ class Comments extends Component {
                                 <Text style={styles.commentText}>{comment.text}</Text>
                             </View>
 
+
                             <RkButton style={styles.likeIcon} rkType="socialPhotos" onPress={() => this.likeComment(index)}>
                                 <Text style={styles.countLikes}> {comment.likeList.length.toString()} </Text>
                                 {comment.hasLike ? <Icon style={{ alignSelf: "flex-end" }} name='ios-heart' type='ionicon' color={Colors.red} />
@@ -170,6 +197,11 @@ class Comments extends Component {
                                 }
                             </RkButton>
 
+                            {this.state.id == comment.idUser &&
+                                <RkButton rkType="socialPhotos" onPress={() => this.deleteComment(index)}>
+                                    <Icon style={{ alignSelf: "flex-end" }} name='ios-close' type='ionicon' size={30} />
+                                </RkButton>
+                            }
 
                         </View>
                     ))}

@@ -37,6 +37,12 @@ export default styles = StyleSheet.create({
         flex: 1,
         marginRight: 10
     },
+    likeIcon: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignSelf: "flex-end",
+        flex: 1
+    },
     commentPart: {
         height: globalHeight - 38,
         padding: 20,
@@ -59,12 +65,6 @@ export default styles = StyleSheet.create({
     },
     commentText: {
         maxWidth: window.width - 140
-    },
-    likeIcon: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignSelf: "flex-end",
-        flex: 1
     },
     countLikes: {
         marginRight: 4

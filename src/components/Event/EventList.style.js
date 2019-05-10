@@ -10,18 +10,19 @@ export default StyleSheet.create({
     },
     imageContainer: {
         flex: 3,
-        width: 96,
-        height: 96,
+        maxWidth: 96,
+        maxHeight: 96,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 2,
         },
         shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowRadius: 2,
         elevation: 5,
         borderRadius: 5,
-        overflow: "visible"
+        overflow: "visible",
+        marginRight: 12
     },
     image: {
         width: 96,

@@ -5,15 +5,11 @@
 import Reactotron from 'reactotron-react-native';
 
 const initialState = {
-	User: {
+	currentUser: {
 		id: undefined,
 		firstname: undefined,
 		lastname: undefined,
 		email: undefined
-	},
-	Response: {
-		code: 0,
-		type: undefined
 	}
 };
 
@@ -28,16 +24,18 @@ function connexionReducer(state = initialState, action) {
 			} catch (error) {
 				// ... this is fine
 			}
+			if (result.data.user != undefined) {
+				return Object.assign({}, state, {
+					currentUser: {
+						id: result.data.user.userId,
+						firstname: result.data.user.firstName,
+						lastname: result.data.user.lastName,
+						email: result.data.user.mail
+					}
+				});
+			}
 
-			return Object.assign({}, state, {
-				User: {
-					id: result.data.user.userId
-				},
-				Response: {
-					code: result.code,
-					type: 'WEBSOCKET:R:LOGIN'
-				}
-			});
+			return state;
 
 		case 'WEBSOCKET:R:REGISTER':
 			// Assuming that your data is a DOMString in JSON format
@@ -49,7 +47,7 @@ function connexionReducer(state = initialState, action) {
 			}
 
 			return Object.assign({}, state, {
-				User: {
+				currentUser: {
 					id: result.id
 				},
 

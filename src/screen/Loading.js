@@ -4,14 +4,16 @@ import { connect } from 'react-redux';
 import { connectWS, sendMessage } from '../../Store/Actions/Websockets';
 import Colors from '../consts/Colors';
 import styles from "./styles/Loading.style"
+import { clearResponse } from '../../Store/Actions/Response';
 
 const mapStateToProps = (state) => ({
-	response: state.websocket.Response
+	response: state.Response
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	connectWebSocket: (body) => dispatch(connectWS(body)),
-	sendWsMessage: (body) => dispatch(sendMessage(body))
+	sendWsMessage: (body) => dispatch(sendMessage(body)),
+	clearResponse: () => dispatch(clearResponse())
 });
 
 class Loading extends Component {

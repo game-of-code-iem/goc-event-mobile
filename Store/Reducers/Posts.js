@@ -5,13 +5,7 @@
 import Reactotron from 'reactotron-react-native';
 
 const initialState = {
-	Posts: {
-		posts: []
-	},
-	Response: {
-		code: 0,
-		type: undefined
-	}
+	posts: []
 };
 
 function postReducer(state = initialState, action) {

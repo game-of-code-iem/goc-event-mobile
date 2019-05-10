@@ -39,10 +39,12 @@ const middleware = (store) => (next) => (action) => {
 
 				socket.on('register/user', (event) => {
 					store.dispatch({ type: 'WEBSOCKET:R:REGISTER', payload: event });
+					store.dispatch({ type: 'RESPONSE', payload: { type: 'WEBSOCKET:R:REGISTER', payload: event } });
 				});
 
 				socket.on('login/user', (event) => {
 					store.dispatch({ type: 'WEBSOCKET:R:LOGIN', payload: event });
+					store.dispatch({ type: 'RESPONSE', payload: { type: 'WEBSOCKET:R:LOGIN', payload: event } });
 				});
 
 				//////////////////////////////////////////////////////////////////////////
@@ -65,6 +67,7 @@ const middleware = (store) => (next) => (action) => {
 
 				socket.on('get/event', (event) => {
 					store.dispatch({ type: 'WEBSOCKET:R:EVENT_GET', payload: event });
+					store.dispatch({ type: 'RESPONSE', payload: { type: 'WEBSOCKET:R:EVENT_GET', payload: event } });
 				});
 
 				/////////////////////////////////////////////////////////////////////////////
@@ -100,6 +103,20 @@ const middleware = (store) => (next) => (action) => {
 				socket.on('update/post', (event) => {
 					store.dispatch({ type: 'WEBSOCKET:R:POST_UPDATE', payload: event });
 				});
+
+				//////////////////////////////////////////////////////////////////////////////
+
+				// socket.on('action', (event) => {
+				// 	switch (key) {
+				// 		case value:
+
+				// 			break;
+
+				// 		default:
+				// 			break;
+				// 	}
+
+				// });
 			}
 
 			break;
@@ -114,6 +131,10 @@ const middleware = (store) => (next) => (action) => {
 		case 'WEBSOCKET:DISCONNECT':
 			console.log('disconnect');
 
+			break;
+
+		case 'WEBSOCKET:CLEAR_RESPONSE':
+			store.dispatch({ type: 'RESPONSE:CLEAR' });
 			break;
 
 		default:

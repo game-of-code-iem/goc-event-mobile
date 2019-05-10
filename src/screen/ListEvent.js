@@ -12,16 +12,22 @@ import styles from './styles/ListEvent.style';
 import Colors from '../consts/Colors';
 //Redux
 import { connect } from 'react-redux';
-import { getEvent } from '../../Store/Actions/Event';
+import { getEvent, setCurrentEvent, addEvent } from '../../Store/Actions/Event';
+import { clearResponse } from '../../Store/Actions/Response';
+import _ from 'lodash';
+import { Reactotron } from 'reactotron-react-native';
 
 const mapStateToProps = (state) => ({
-	response: state.websocket.Response,
-	user: state.connexion.User,
-	events: state.events.Events.events
+	response: state.Response,
+	user: state.User.currentUser,
+	events: state.Events.events
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	getEvent: (body) => dispatch(getEvent(body))
+	getEvent: (body) => dispatch(getEvent(body)),
+	setCurrentEvent: (body) => dispatch(setCurrentEvent(body)),
+	addEvent: (body) => dispatch(addEvent(body)),
+	clearResponse: () => dispatch(clearResponse())
 });
 
 var context = null
@@ -61,6 +67,9 @@ class ListEvent extends Component {
 	};
 	onEventItemClick(id) {
 		console.log('ListEvent:onEventItemClick', id);
+		let tmp = this.props.events[id];
+		this.props.setCurrentEvent(tmp);
+		this.props.navigation.navigate('DetailEvent');
 		//TODO La navigation vers le detail de l'event
 	}
 
@@ -83,6 +92,12 @@ class ListEvent extends Component {
 
 	onDialogInputData(data) {
 		console.log("Code d'invitation reçu : ", data);
+		this.props.addEvent({
+			auth: this.props.user.id,
+			data: {
+				inviteCode: data
+			}
+		});
 		//TODO traiter le code d'invitation
 		this.toggleDialog();
 	}

@@ -11,35 +11,26 @@ import { LinearGradient } from 'expo';
 import styles from './styles/DetailEvent.style';
 
 const mapStateToProps = (state) => ({
-	active: state.visibilityFilter
+	currentEvent: state.Events.currentEvent
 });
 
-const mapDispatchToProps = (dispatch) => ({
-	setVisibilityFilter: (body) => dispatch(setVisibilityFilter(body))
-});
+const mapDispatchToProps = (dispatch) => ({});
 
 class DetailEvent extends Component {
-
 	constructor(props) {
 		super(props);
 
 		this.state = {
+			event: props.currentEvent,
 			isAdmin: true,
-			eventId: "",
-			title: "Mon super événement",
-			place: "Lyon 6",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce congue neque in ligula accumsan, id malesuada risus fringilla. Curabitur id nisl massa. Curabitur facilisis nunc mattis venenatis condimentum. Curabitur ultricies sagittis scelerisque. Nulla placerat augue non lectus vestibulum.",
-			urlCoverImage: "http://www.mdjunited.com/medias/images/zoo.jpg",
-			guests: [
-				{prenom: "Morgane", nom:"Boussert"},
-				{prenom: "Jean-machin", nom:"truc"}
-			],
-			picturesList: [],
+
+			guests: [ { prenom: 'Morgane', nom: 'Boussert' }, { prenom: 'Jean-machin', nom: 'truc' } ],
+
 			isGuestsListVisible: false
 		};
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		// this.setState({
 		// 	eventId:  this.props.navigation.getParams('eventId', 0)
 		// })
@@ -59,17 +50,15 @@ class DetailEvent extends Component {
 		}
 	}
 
-	showListPics(){
-		 this.props.navigation.navigate('Gallery', {
-		 	eventId: this.state.eventId
-		   });
+	showListPics() {
+		this.props.navigation.navigate('Gallery');
 	}
 
-	showListGuests(){
-		var isVisible = this.state.isGuestsListVisible
+	showListGuests() {
+		var isVisible = this.state.isGuestsListVisible;
 		this.setState({
 			isGuestsListVisible: !isVisible
-		})
+		});
 	}
 
 	deleteGuest(index){
@@ -100,12 +89,11 @@ class DetailEvent extends Component {
 	render() {
 		return (
 			<View style={styles.page}>
-
 				<View style={styles.screenContainer}>
-
-					<Overlay 
+					<Overlay
 						isVisible={this.state.isGuestsListVisible}
-						onBackdropPress={() => this.setState({ isGuestsListVisible: false})}>
+						onBackdropPress={() => this.setState({ isGuestsListVisible: false })}
+					>
 						<Text style={styles.picsTitle}>Liste des participants</Text>
 						{this.state.guests.map((guest, index) => (
 							<View style={styles.guestRow}>
@@ -117,69 +105,87 @@ class DetailEvent extends Component {
 						))}
 					</Overlay>
 
-					<Image
-					style={{width: 450, height: 200}}
-					source={{uri: this.state.urlCoverImage}}
-					/>
-					<LinearGradient
-						colors={['transparent', "rgba(255,255,255,0.2)","rgba(255,255,255,0.4)", "rgba(255,255,255,0.6)", "rgba(255,255,255,0.8)", "white"]}
-						style={{ top:-50, alignItems: 'center', height:50, marginBottom: -50 }}></LinearGradient>
-					
+					<Image style={{ width: 450, height: 200 }} source={{ uri: this.state.event.uri }} />
 
 					<View style={styles.textContainer}>
-						<Text style={styles.title}>{this.state.title}</Text>
-						<Text style={styles.lieuText}>{this.state.place}</Text>
+						<Text style={styles.title}>{this.state.event.title}</Text>
+						<Text style={styles.lieuText}>{this.state.event.place}</Text>
 
-						<TouchableOpacity activeOpacity={1} style={styles.guestList} onPress={() => this.showListGuests()}>
-							{this.state.guests.map((guest, index) => {								
-								if(index <= 3) {
-									return <Avatar rounded title={guest.prenom.charAt(0).toUpperCase()+ guest.nom.charAt(0).toUpperCase()} /> }																
+						<TouchableOpacity
+							activeOpacity={1}
+							style={styles.guestList}
+							onPress={() => this.showListGuests()}
+						>
+							{this.state.event.guests.map((guest, index) => {
+								if (index < 3) {
+									return (
+										<Avatar
+											rounded
+											title={
+												(guest.firstName == undefined
+													? ''
+													: guest.firstName.charAt(0).toUpperCase()) +
+												(guest.lastName == undefined
+													? ''
+													: guest.lastName.charAt(0).toUpperCase())
+											}
+										/>
+									);
+								}
 							})}
-							<Avatar rounded title={this.state.guests.length + " +"} />							
-							<Icon style={styles.arrowIcon} name='ios-arrow-forward' type='ionicon' color={Colors.primary}/> 
+							{this.state.event.guests.length > 3 && (
+								<Avatar rounded title={this.state.event.guests.length - 3 + ' +'} />
+							)}
+
+							<Icon
+								style={styles.arrowIcon}
+								name="ios-arrow-forward"
+								type="ionicon"
+								color={Colors.primary}
+							/>
 						</TouchableOpacity>
-							
-						<Divider style={{ backgroundColor: 'black' }}/>
-						<Text style={styles.descriptionText}>{this.state.description}</Text>
-
-						<Text style={styles.picsTitle}>Photos</Text>
-					
-							<TouchableOpacity activeOpacity={1} style={styles.picsList} onPress={() => this.showListPics()}>
-							
-								<Image
-									source={{ uri: 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg' }}
-									style={{ width: 100, height: 100 }}
-									PlaceholderContent={<ActivityIndicator />}
-								/>
-								<Image
-									source={{ uri: 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg' }}
-									style={{ width: 100, height: 100 }}
-									PlaceholderContent={<ActivityIndicator />}
-								/>
-								<Image
-									source={{ uri: 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg' }}
-									style={{ width: 100, height: 100 }}
-									PlaceholderContent={<ActivityIndicator />}
-								/>
-
-								<View style={styles.arrowIconPic}>
-									<Icon size={30} name='ios-arrow-forward' type='ionicon' color={Colors.primary}/> 
-								</View>		
-
-								</TouchableOpacity>
-
-							
-
 					</View>
 
+					<TouchableOpacity activeOpacity={1} style={styles.picsList} onPress={() => this.showListPics()}>
+						<Image
+							source={{
+								uri:
+									this.state.event.picturesList[0] == undefined
+										? 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'
+										: this.state.event.picturesList[0].uri
+							}}
+							style={{ width: 100, height: 100 }}
+							PlaceholderContent={<ActivityIndicator />}
+						/>
+						<Image
+							source={{
+								uri:
+									this.state.event.picturesList[1] == undefined
+										? 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'
+										: this.state.event.picturesList[1].uri
+							}}
+							style={{ width: 100, height: 100 }}
+							PlaceholderContent={<ActivityIndicator />}
+						/>
+						<Image
+							source={{
+								uri:
+									this.state.event.picturesList[2] == undefined
+										? 'https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/12/22223742/Events-1200x630.jpg'
+										: this.state.event.picturesList[2].uri
+							}}
+							style={{ width: 100, height: 100 }}
+							PlaceholderContent={<ActivityIndicator />}
+						/>
+					</TouchableOpacity>
 				</View>
-
-				{this.state.isAdmin && 
-				<View style={styles.bottomSigninButton}>
-					<RkButton rkType="pixEventBottom" style={styles.signinButton}>MODIFIER</RkButton>
-				</View>
-				}
-
+				{this.state.event.isAdmin && (
+					<View style={styles.bottomSigninButton}>
+						<RkButton rkType="pixEventBottom" style={styles.signinButton}>
+							MODIFIER
+						</RkButton>
+					</View>
+				)}
 			</View>
 		);
 	}

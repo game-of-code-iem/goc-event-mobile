@@ -6,8 +6,8 @@ import { bold, white } from 'ansi-colors';
 
 const window = Dimensions.get('window')
 
-const globalHeight = Platform.OS == "ios" ? window.height - Header.HEIGHT - 24 : 
-window.height - Header.HEIGHT - getStatusBarHeight()
+const globalHeight = Platform.OS == "ios" ? window.height - Header.HEIGHT - 24 :
+    window.height - Header.HEIGHT - getStatusBarHeight()
 
 export default styles = StyleSheet.create({
 
@@ -26,7 +26,6 @@ export default styles = StyleSheet.create({
     },
     bottomSigninButton: {
         alignSelf: "flex-end",
-
     },
     signinButton: {
         width: window.width,
@@ -63,7 +62,10 @@ export default styles = StyleSheet.create({
     picsList: {
         display: "flex",
         flexDirection: 'row',
-        justifyContent: "space-evenly"        
+        justifyContent: "space-evenly"
+    },
+    textNoData: {
+        padding: 8
     },
     arrowIconPic: {
         height: 100,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, ActivityIndicator, TouchableOpacity, Alert, InteractionManager } from 'react-native';
 import { connect } from 'react-redux';
-
+import IconFa from 'react-native-vector-icons/FontAwesome';
 import { Divider, Avatar, Icon, Image, Overlay, Button } from 'react-native-elements';
 import { RkButton } from 'react-native-ui-kitten';
 import Colors from '../consts/Colors';
@@ -28,17 +28,20 @@ class DetailEvent extends Component {
 		};
 	}
 
-	componentDidMount() {
-		// this.setState({
-		// 	eventId:  this.props.navigation.getParams('eventId', 0)
-		// })
-	}
-
 	// NAV BAR
 	static navigationOptions = ({ navigation }) => {
+		//console.log("NAV GOT CODE ?", navigation.getParam('code'))
+		const code = navigation.getParam('code')
 		return {
 			title: 'Détail événement',
-			headerTintColor: Colors.primary
+			headerTintColor: Colors.primary,
+			headerRight: (
+				<View style={{ marginRight: 8 }}>
+					<TouchableOpacity onPress={() => navigation.navigate("QRCode", {code: code})}>
+						<IconFa name="qrcode" size={28} />
+					</TouchableOpacity>
+				</View>
+			)
 		};
 	};
 
@@ -86,6 +89,15 @@ class DetailEvent extends Component {
 		);
 	}
 
+	componentDidMount() {
+		InteractionManager.runAfterInteractions(() => {
+            this.props.navigation.setParams({ code: this.state.event.inviteCode })
+        });
+	}
+
+	sendCodeToNavigation() {
+		//nothing to do here...
+	}
 
 	render() {
 		let withPictures = this.state.event.picturesList[0] != undefined || this.state.event.picturesList[1] != undefined || this.state.event.picturesList[2] != undefined
@@ -94,6 +106,7 @@ class DetailEvent extends Component {
 		console.log("2", this.state.event.picturesList[1])
 		console.log("3", this.state.event.picturesList[2])
 		console.log("total:", withPictures)
+		//this.sendCodeToNavigation()
 		return (
 			<View style={styles.page}>
 				<View style={styles.screenContainer}>

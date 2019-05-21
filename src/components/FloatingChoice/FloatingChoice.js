@@ -28,21 +28,21 @@ class FloatingChoice extends Component {
         return (
             <View style={styles.componentContainer}>
                 <View style={styles.choicesContainer}>
-                    {this.state.showingChoices &&
+                    {this.state.showingChoices && this.props.choice1 != null &&
                         <TouchableOpacity onPress={() => this.onItemClick(1)}>
                             <View style={styles.choiceButton}>
                                 <RkText style={styles.choiceText}>{this.props.choice1}</RkText>
                             </View>
                         </TouchableOpacity>
                     }
-                    {this.state.showingChoices &&
+                    {this.state.showingChoices && this.props.choice2 != null &&
                         <TouchableOpacity onPress={() => this.onItemClick(2)} >
                             <View style={styles.choiceButton}>
                                 <RkText style={styles.choiceText}>{this.props.choice2}</RkText>
                             </View>
                         </TouchableOpacity>
                     }
-                    {this.state.showingChoices &&
+                    {this.state.showingChoices && this.props.choice3 != null &&
                         <TouchableOpacity onPress={() => this.onItemClick(3)} >
                             <View style={styles.choiceButton}>
                                 <RkText style={styles.choiceText}>{this.props.choice3}</RkText>

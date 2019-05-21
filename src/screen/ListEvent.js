@@ -91,7 +91,7 @@ class ListEvent extends Component {
 	}
 
 	onDialogInputData(data) {
-		console.log("Code d'invitation reçu : ", data);
+		//console.log("Code d'invitation reçu : ", data);
 		this.props.addEvent({
 			auth: this.props.user.id,
 			data: {

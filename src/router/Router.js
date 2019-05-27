@@ -6,6 +6,8 @@ import DetailEventScreen from '../screen/DetailEvent';
 import GalleryScreen from '../screen/Gallery';
 import WorkbenchEventScreen from '../screen/WorkbenchEvent';
 import QRCode from '../screen/QRCode'
+import CommentsScreen from '../screen/Comments';
+
 import { createStackNavigator } from 'react-navigation';
 
 //This is a router, it allow to change between different screen
@@ -18,7 +20,9 @@ const AppNavigator = createStackNavigator({
 	Gallery: GalleryScreen,
 	Register: RegisterScreen,
 	WorkbenchEvent: WorkbenchEventScreen,
-	QRCode: QRCode
+	QRCode: QRCode,
+	Comments: CommentsScreen,
 });
+
 
 export default AppNavigator;
